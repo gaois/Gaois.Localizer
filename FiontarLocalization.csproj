@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>Fiontar.Localization</PackageId>
+    <version>0.5.0-alpha</version>
+    <Authors>Ronan Doherty</Authors>
+    <Company>Fiontar &amp; Scoil na Gaeilge, Dublin City University</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.1.0" />
+  </ItemGroup>
+
+</Project>
