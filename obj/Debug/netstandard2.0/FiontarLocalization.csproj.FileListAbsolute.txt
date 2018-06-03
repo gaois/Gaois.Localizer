@@ -1,9 +1,0 @@
-/Users/ronan/repo/FiontarLocalization/obj/Debug/netstandard2.0/FiontarLocalization.csprojAssemblyReference.cache
-/Users/ronan/repo/FiontarLocalization/obj/Debug/netstandard2.0/FiontarLocalization.csproj.CoreCompileInputs.cache
-/Users/ronan/repo/FiontarLocalization/obj/Debug/netstandard2.0/FiontarLocalization.AssemblyInfoInputs.cache
-/Users/ronan/repo/FiontarLocalization/obj/Debug/netstandard2.0/FiontarLocalization.AssemblyInfo.cs
-/Users/ronan/repo/FiontarLocalization/bin/Debug/netstandard2.0/FiontarLocalization.deps.json
-/Users/ronan/repo/FiontarLocalization/bin/Debug/netstandard2.0/FiontarLocalization.dll
-/Users/ronan/repo/FiontarLocalization/bin/Debug/netstandard2.0/FiontarLocalization.pdb
-/Users/ronan/repo/FiontarLocalization/obj/Debug/netstandard2.0/FiontarLocalization.dll
-/Users/ronan/repo/FiontarLocalization/obj/Debug/netstandard2.0/FiontarLocalization.pdb
