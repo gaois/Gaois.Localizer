@@ -27,7 +27,7 @@ namespace Fiontar.Localization
 
                 if (cookieCulture == locale)
                 {
-		            return Next(context);
+                    return Next(context);
                 }
             }
 
@@ -38,8 +38,8 @@ namespace Fiontar.Localization
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture: locale, uiCulture: locale)),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1), IsEssential = false }
             );
-
-		    return Next(context);
+            
+            return Next(context);
         }
     }
 }
