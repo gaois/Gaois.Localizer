@@ -21,7 +21,7 @@ Fiontar.Localization is a [Nuget library](https://www.nuget.org/packages/Fiontar
     4. The default language specified in Startup.cs
 - If the request URL contains a language code users will not be directed to another version of the page, regardless of their own language settings. This is good for SEO and means that the users gets the page they thought they were opening when they clicked the link. Users should be able to voluntarily switch languages via a dedicated language switcher in the UI.
 - If the user attempts to access a page in an unsupported language (e.g. `www.mymultilingualapp.com/fr/`) this will throw a `CultureNotFoundException` within the application and they will be shown a 404 Not Found error page. (Note: you must configure a viable MVC or Razor Pages route to an error page and specify this within a `app.UseStatusCodePagesWithReExecute()` method in Startup.cs)
-- The user's language preferences will be remembered on subsequent visits: if they last visited the Irish-language version of the websites and they have agreed to the website's privacy settings, they will be shown the Irish-language site the next time they visit the homepage.
+- The user's language preferences will be remembered on subsequent visits: if they last visited the Irish-language version of the website and they have agreed to the website's privacy settings, they will be shown the Irish-language site the next time they visit the homepage.
 
 A sample Startup.cs class is given below:
 
@@ -110,8 +110,8 @@ namespace MyMultilingualApp
 
 Numerous approaches can be taken when localising a website's homepage. Some websites will evaluate a user's preferred language and redirect them to a new URL, such as moving from `example.com` to `example.com/es`. This can be problematic, however, due to the nature of HTTP redirects and how they interact with the browser:
 
-- Some websites (for example, [mozilla.org](https://www.mozilla.org/)) examine the browser's language preferences and implement a 301 (permanent) redirect. This is fine if you are reasonably certain that users will mostly access the application in one language. However, many browser's indefinitely cache 301 redirects, meaning that even if the user later updates their browser settings—or they access the computer in a public location such as a school or a library— the browser will always take them to the first localised version of the site that was opened in that browser.
-- Many other websites implement 302 redirects, likely for the reasons described above. However, this is both semantically incorrect (302 redirects defined pages that have "Moved Temporarily" ) and bad for SEO as web crawlers tend to penalise pages with 302 redirects.
+- Some websites (for example, [mozilla.org](https://www.mozilla.org/)) examine the browser's language preferences and implement a 301 (permanent) redirect. This is fine if you are reasonably certain that users will mostly access the application in one language. However, many browsers indefinitely cache 301 redirects, meaning that even if the user later updates their browser settings—or they access the computer in a public location such as a school or a library— the browser will always take them to the first localised version of the site that was opened in that browser.
+- Many other websites implement 302 redirects, likely for the reasons described above. However, this is both semantically incorrect (302 redirects define pages that have "Moved Temporarily") and bad for SEO as web crawlers tend to penalise pages with 302 redirects.
 
 Therefore, the default approach using the Fiontar.Localization library is not to redirect the user (i.e. the user stays on `example.com`) but the page UI and contents will be localized following criteria 2–4 described in Features above. We feel this gives the optimum results both in terms of SEO and user experience.
 
@@ -131,7 +131,7 @@ services.Configure<RouteCultureOptions>(options =>
 });
 ```
 
-The mapped tags can then be accessed elswhere in the application, and a convenience function is even provided to infer the correct locale:
+The mapped tags can then be accessed elswhere in the application, and a convenience function is even provided to infer the correct locale (the code shown below is a Razor UI):
 
 ```c#
 @foreach (var culture in LocOptions.Value.SupportedUICultures) 
@@ -167,7 +167,7 @@ services.Configure<RouteCultureOptions>(options =>
 
 If you want to migrate from a URL schema that used two-letter language tags (such as `example.com/es`) to a schema that uses regional locales (such as `example.com/es-ES`) Fiontar.Localization includes a helpful redirection protocol that leverages .NET Core's native URL rewriting middleware and takes care of the hard work for you.
 
-The `RedirectLanguageToLocale` object accepts a dictionary that maps the two-letter codes onto your regional locales. In fact, if you had previously created `LanguageLocaleMap` (see Language tag choice above) you can recycle this object here:
+The `RedirectLanguageToLocale` object accepts a dictionary that maps the two-letter codes onto your regional locales. In fact, if you had previously created a `LanguageLocaleMap` (see Language tag choice above) you can recycle this object here:
 
 ```c#
 public void ConfigureServices(IServiceCollection services)
