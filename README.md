@@ -97,7 +97,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 }
 ```
 
-`app.UseRequestLocalization()` activates ASP.NET Core's native middleware to automatically set culture information for requests based on information provided by the client. `app.UseRequestCultureValidation()` verifies that the requested culture is supported by the application. `app.UseRequestCultureExceptionHandler()` implements an exception handler that will return a 404 Not Found status code in the HTTP response if the client attempts to access a page in a culture that is unsupported or unavailable.
+`app.UseRequestLocalization()` activates ASP.NET Core's native localisation middleware to automatically set culture information for requests based on information provided by the client. `app.UseRequestCultureValidation()` verifies that the requested culture is supported by the application. `app.UseRequestCultureExceptionHandler()` implements an exception handler that will return a 404 Not Found status code in the HTTP response if the client attempts to access a page in a culture that is unsupported or unavailable.
 
 2. Modify the *ConfigureServices* method:
 
@@ -207,7 +207,7 @@ Now, the application will attempt to use the second path parameter in the reques
 
 ### A word about SEO
 
-In what is probably the most opinionated feature of this library, preference is given to a culture obtained from a URL path parameter over client cookie or HTTP header settings. This means that if a user visits `www.mymultilingualapp.com/en-GB/` and their preferred browser language is US English (en-US) they will still receive the page in United Kingdom English (en-GB), provided this is a supported culture within the application. This means that: (1) users get the page they expected to open when they clicked the URL, and; (2) search crawlers can reliably associate URLs with localised content. This is optimal for SEO and for user experience. Having opened the page, users should be able to voluntarily switch languages via a dedicated language switcher in the UI should they wish.
+In what is probably the most opinionated feature of this library, preference is always given to a culture obtained from a URL path parameter over client cookie or HTTP header settings. This means that if a user visits `www.mymultilingualapp.com/en-GB/` and their preferred browser language is US English (en-US) they will still receive the page in United Kingdom English (en-GB), provided this is a supported culture within the application. This means that: (1) users get the page they expected to open when they clicked the URL, and; (2) search crawlers can reliably associate URLs with localised content. We believe this is optimal for SEO and for user experience. Having opened the page, users should be able to voluntarily switch languages via a dedicated language switcher in the UI should they wish.
 
 ## Unsupported cultures
 
@@ -215,7 +215,7 @@ What happens when a user inputs a URL that contains an unsupported culture? For 
 
 ### Return a 404 Not Found status code
 
-Add `app.UseRequestCultureExceptionHandler()` to the request execution pipeline *before* the request culture validation middleware. The exception handlers in Fiontar.Localization use an async method that listen for exceptions thrown as the request makes its way through the pipeline. Therefore, if the exception handlers are applied after after the error is thrown they will have no effect.
+Add `app.UseRequestCultureExceptionHandler()` to the request execution pipeline *before* the request culture validation middleware. The exception handlers in Fiontar.Localization use an async method that listen for exceptions thrown as the request makes its way through the pipeline. Exception handlers applied after the error is thrown have no effect.
 
 ```csharp
     app.UseRequestCultureExceptionHandler();
@@ -223,11 +223,11 @@ Add `app.UseRequestCultureExceptionHandler()` to the request execution pipeline 
     app.UseRequestLocalization(localizationOptions);
 ```
 
-With this setting in place, a request to an unsupported culture will cause a 404 Not Found HTTP status code to be returned in the response and the user will be shown an appropriate message, provided that an error page route has been configured. This may be the ideal approach in terms of SEO. Search engines will be in no doubt that content is not available at the requested URL.
+With this middleware in place, a request to an unsupported culture will cause a 404 Not Found HTTP status code to be returned in the response and the user will be shown an appropriate message, provided that an error page route has been configured. This may be the ideal approach in terms of SEO. Search engines will be in no doubt that content is not available at the requested URL.
 
 ### Redirect the user to a page in the default culture
 
-This may, in some cases, be the preferred option for user experience. When a URL containing an unsupported culture is accessed the client will be redirected to an equivalent page in the default culture of the application. To implement this, place `app.UseRequestCultureExceptionRerouter()` *before* the request culture validation middleware in the `Configure()` method in **Startup.cs**. By default, the response will return a 302 redirect to the same path but with an update culture parameter.
+This may, in some cases, be the preferred option for user experience. When a URL containing an unsupported culture is accessed the client will be redirected to an equivalent page in the default culture of the application. To implement this, place `app.UseRequestCultureExceptionRerouter()` *before* the request culture validation middleware in the `Configure()` method in **Startup.cs**. By default, the response will return a 302 redirect to the same path with an updated culture parameter.
 
 ```csharp
     app.UseRequestCultureExceptionRerouter();
@@ -290,7 +290,7 @@ The `UseLocalizationCookies()` method takes an instance of the `LocalizationCook
 
 ## Landing page redirection
 
-When a user visits a website's homepage, e.g. `www.mymultilingualapp.com`, it may sometimes be desirable to automatically redirect them to the URL for a localised version of that page, e.g `www.mymultilingualapp.com/es`. This is not the default behaviour when using Fiontar.Localization for reasons of SEO (see below) but we recongise that it is a common use case. To turn on landing page redirection, just add `app.UseRequireCulturePathParameter()` to the `Configure()` method in **Startup.cs**. It should be the last localisation method applied.
+When a user visits a website's homepage, e.g. `www.mymultilingualapp.com`, it may sometimes be desirable to automatically redirect them to the URL for a localised version of that page, e.g `www.mymultilingualapp.com/es`. This is not the default behaviour when using Fiontar.Localization for reasons of SEO (see below) but we recongise that it is a common use case. To turn on landing page redirection, just add `app.UseRequireCulturePathParameter()` to the `Configure()` method in **Startup.cs**. It should be the last piece of localisation middleware to be applied.
 
 ```csharp
     app.UseRequestCultureExceptionHandler();
@@ -325,7 +325,7 @@ services.Configure<RouteCultureOptions>(options =>
 });
 ```
 
-The mapped tags can then be accessed elswhere in the application, and a `InferLocaleFromLanguage()` convenience function is provided to infer the correct locale or region subtag (the code shown below is taken from a Razor view):
+The mapped tags can then be accessed elswhere in the application, and an `InferLocaleFromLanguage()` convenience function is provided to output the correct locale or region subtag when given a corresponding language code (the code shown below is taken from a Razor view):
 
 ```csharp
 @using Fiontar.Localization
@@ -348,7 +348,7 @@ The mapped tags can then be accessed elswhere in the application, and a `InferLo
 
 ## Migrating between language tags in a URL scheme
 
-If you wish to migrate from a URL scheme that used two-letter language tags (such as `example.com/es`) to a schema that uses regional locales (such as `example.com/es-ES`), Fiontar.Localization includes a helpful redirection protocol that leverages ASP.NET Core's native URL rewriting middleware to take care of the hard work for you.
+If you wish to migrate from a URL scheme that used two-letter language tags (such as `example.com/es`) to a scheme that uses regional locales (such as `example.com/es-ES`), Fiontar.Localization includes a helpful redirection protocol that leverages ASP.NET Core's native URL rewriting middleware to take care of the hard work for you.
 
 First, configure the `RouteCultureOptions` service as described in the [previous section](#language-tag-choice):
 
