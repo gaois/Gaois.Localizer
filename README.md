@@ -2,7 +2,7 @@
 
 [![NuGet](https://img.shields.io/badge/nuget-0.6.0--alpha-blue.svg)](https://www.nuget.org/packages/Fiontar.Localization/)
 
-A toolkit for creating multilingual web applications on ASP.NET Core. It offers a suite of configurable localization middleware, including request culture validators, cookie management, exception handlers, and URL rewriting rules, that work alongside the framework's native [globalisation and localisation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1) functions to take the pain out of building localised websites.
+A toolkit for creating multilingual web applications on ASP.NET Core. It offers a suite of configurable localisation middleware, including request culture validators, cookie management, exception handlers, and URL rewriting rules, that work alongside the framework's native [globalisation and localisation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1) functions to take the pain out of building localised websites.
 
 The library was developed at [Fiontar & Scoil na Gaeilge](https://www.gaois.ie), Dublin City University, Ireland and reflects our own experience producing multilingual web applications.
 
@@ -32,25 +32,25 @@ The library was developed at [Fiontar & Scoil na Gaeilge](https://www.gaois.ie),
 
 ## What problem does it solve?
 
-The library complements native localisation tools like `IStringLocalizer`, `IHtmlLocalizer`, `IViewLocalizer`, resource files and the `CultureInfo` class. If you are not already familiar with these aspects of globalisation and localisation in ASP.NET Core you will benefit greatly from [reading up on them](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1) first. Particularly, it will explain why we use terms like request *cultures* and target *cultures*, rather than just target languages, in this document. Fiontar.Localization is mainly concerned with how the target culture is inferred from the HTTP request, i.e. how do we know which form of localized contents to display to the user.
+The library complements native localisation tools like `IStringLocalizer`, `IHtmlLocalizer`, `IViewLocalizer`, resource files and the `CultureInfo` class. If you are not already familiar with these aspects of globalisation and localisation in ASP.NET Core you will benefit greatly from [reading up on them](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1) first. Particularly, it will explain why we use terms like request *cultures* and target *cultures*, rather than just target languages, in this document. Fiontar.Localization is mainly concerned with how the target culture is inferred from the HTTP request, i.e. how do we know which form of localised contents to display to the user.
 
 ASP.NET Core does offer a [number of tools](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1#implement-a-strategy-to-select-the-languageculture-for-each-request) to this end but they are somewhat rigid, and do not account for a number of scenarios. Notably, and for various well-intentioned reasons, the `RouteDataRequestCultureProvider` does not work out-of-the-box and requires additional configuration if you want to ascertain the request culture from URL parameters like `/fr-FR/about/`. Furthermore, it is left to the developer to cater for scenarios where the user attempts to access a page in a culture that is not supported by the application and to implement solutions that persist user language preferences across sessions.
 
-This library offers common-sense solutions to a number of common localization requirements. As a result, it is moderately opinionated in its approach, but we've tried to leave each individual tool as open to configuration as possible.
+This library offers common-sense solutions to a number of common localisation requirements. As a result, it is moderately opinionated in its approach, but we've tried to leave each individual tool as open to configuration as possible.
 
 ## Features
 
 The library provides out-of-the-box functionality that allows you to:
 
 - Get the request culture from URL path parameters such as `www.mymultilingualapp.com/en-GB/about/` and `www.mymultilingualapp.com/ga-IE/about/`
-- Use cookies and HTTP Accept-Language headers to infer the user's desired culture when they visit the website homepage, e.g. `www.mymultilingualapp.com`, where no path parameters are present.
+- Use cookies and HTTP `Accept-Language` headers to infer the user's desired culture when they visit the website homepage, e.g. `www.mymultilingualapp.com`, where no path parameters are present.
 - Handle requests to unsupported cultures, either by returning a 404 error page or redirecting the user to a page in the default language
-- Exclude certain routes from being affected by the localization middleware
-- Manage and configure settings related to localization cookies, so that the user's language preferences can be persisted across browsing sessions
-- Decide if users should be redirected to a localized landing page after they first reach the homepage of your site
+- Exclude certain routes from being affected by the localisation middleware
+- Manage and configure settings related to localisation cookies, so that the user's language preferences can be persisted across browsing sessions
+- Decide if users should be redirected to a localised landing page after they first reach the homepage of your site
 - Handle scenarios where you wish to internally map a two- or three-letter ISO language code in the URL to a region or an extended language subtag
 
-Most of these features are configurable: sensible defaults are supplied, but you get to specify which types of redirects to use, how long before cookies expire, etc. The library was also designed very much with SEO in mind, and the default setup offers an optimal localization solution when it comes to being indexed by major search engines.
+Most of these features are configurable: sensible defaults are supplied, but you get to specify which types of redirects to use, how long before cookies expire, etc. The library was also designed very much with SEO in mind, and the default setup offers an optimal localisation solution when it comes to being indexed by major search engines.
 
 ## Install and setup
 
@@ -140,7 +140,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-The majority of the above code implements native ASP.NET Core localization functions. The `RouteCultureProvider` object, however, is responsible for inferring the target culture from the HTTP request. This functionality is discussed in more detail below.
+The majority of the above code implements native ASP.NET Core localisation functions. The `RouteCultureProvider` object, however, is responsible for inferring the target culture from the HTTP request. This functionality is discussed in more detail below.
 
 ## Getting the request culture
 
@@ -207,7 +207,7 @@ Now, the application will attempt to use the second path parameter in the reques
 
 ### A word about SEO
 
-In what is probably the most opinionated feature of this library, preference is given to a culture obtained from a URL path parameter over client cookie or HTTP header settings. This means that if a user visits `www.mymultilingualapp.com/en-GB/` and their preferred browser language is US English (en-US) they will still receive the page in United Kingdom English (en-GB), provided this is a supported culture within the application. This means that: (1) users get the page they expected to open when they clicked the URL, and; (2) search crawlers can reliably associate URLs with localized content. This is optimal for SEO and for user experience. Having opened the page, users should be able to voluntarily switch languages via a dedicated language switcher in the UI should they wish.
+In what is probably the most opinionated feature of this library, preference is given to a culture obtained from a URL path parameter over client cookie or HTTP header settings. This means that if a user visits `www.mymultilingualapp.com/en-GB/` and their preferred browser language is US English (en-US) they will still receive the page in United Kingdom English (en-GB), provided this is a supported culture within the application. This means that: (1) users get the page they expected to open when they clicked the URL, and; (2) search crawlers can reliably associate URLs with localised content. This is optimal for SEO and for user experience. Having opened the page, users should be able to voluntarily switch languages via a dedicated language switcher in the UI should they wish.
 
 ## Unsupported cultures
 
@@ -309,7 +309,7 @@ Numerous approaches can be taken when localising a website's homepage. Some webs
 - Some websites (for example, [mozilla.org](https://www.mozilla.org/)) examine the browser's language preferences and implement a 301 (permanent) redirect. This is fine if you are reasonably certain that users will mostly access the application in one language. However, many browsers indefinitely cache 301 redirects, meaning that even if the user later updates their browser settings—or they access the computer in a public location such as a school or a library— the browser will always take them to the first localised version of the site that was opened in that browser.
 - Many other websites implement 302 redirects, likely for the reasons described above. However, this is both semantically incorrect (302 redirects define pages that have "Moved Temporarily") and bad for SEO as it is unclear whether web crawlers pay attention to pages with 302 redirects.
 
-That is why the default approach using the Fiontar.Localization library is not to redirect the user (i.e. the user stays on `example.com`) though the culture information will still be localized according to the criteria outlined [above](#getting-the-request-culture). We feel this gives optimal results both in terms of SEO and user experience.
+That is why the default approach using the Fiontar.Localization library is not to redirect the user (i.e. the user stays on `example.com`) though the culture information will still be localised according to the criteria outlined [above](#getting-the-request-culture). We feel this gives optimal results both in terms of SEO and user experience.
 
 ## Language tag choice
 
