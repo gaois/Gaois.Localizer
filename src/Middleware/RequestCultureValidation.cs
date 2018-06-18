@@ -7,26 +7,35 @@ using Microsoft.Extensions.Options;
 
 namespace Fiontar.Localization
 {
+    /// <summary>
+    /// Verifies that the request culture is supported by the application
+    /// </summary>
     public class RequestCultureValidation
     {
         private readonly RequestDelegate Next;
         private readonly IOptions<RequestLocalizationOptions> LocalizationOptions;
         private readonly IOptions<RouteCultureOptions> RouteCultureOptions;
     
+        /// <summary>
+        /// Verifies that the request culture is supported by the application
+        /// </summary>
         public RequestCultureValidation(
-            RequestDelegate next,
-            IOptions<RequestLocalizationOptions> localizationOptions = null,
-            IOptions<RouteCultureOptions> routeCultureOptions = null)
+            RequestDelegate next, 
+            IOptions<RequestLocalizationOptions> localizationOptions, 
+            IOptions<RouteCultureOptions> routeCultureOptions)
         {
             Next = next;
             LocalizationOptions = localizationOptions;
             RouteCultureOptions = routeCultureOptions;
         }
 
+        /// <summary>
+        /// Tests the request culture against supported application cultures and non-culture values. Throws a <see cref="System.Globalization.CultureNotFoundException"/> if request culture is not supported.
+        /// </summary>
         public Task Invoke(HttpContext context)
         {
             var parameters = context.Request.Path.Value.Split('/');
-            var culture = parameters[1];
+            var culture = parameters[RouteCultureOptions.Value.CultureParameterIndex];
             var nonCultures = RouteCultureOptions.Value.NonCultures ?? new List<string>();
 
             nonCultures = AddDefaultNonCultures(nonCultures);
@@ -45,22 +54,28 @@ namespace Fiontar.Localization
             }
         }
 
+        /// <summary>
+        /// Protects against circular culture exception errors when an error view is called
+        /// </summary>
         private IList<string> AddDefaultNonCultures(IList<string> nonCultures)
         {
-            // Protect against circular culture exception errors when error view is called
             nonCultures.Add("Error");
             return nonCultures;
         }
 
-        public bool IsSupportedCulture(string language)
+        /// <summary>
+        /// Tests that a given request culture is supported by the application
+        /// </summary>
+        /// <param name="requestCulture">The culture provided in the request</param>
+        public bool IsSupportedCulture(string requestCulture)
         {
-            if (string.IsNullOrEmpty(language))
+            if (string.IsNullOrEmpty(requestCulture))
             {
                 return true;
             }
             
             var culture = new CultureSupportValidation(LocalizationOptions);
-            return culture.IsSupportedCulture(language);
+            return culture.IsSupportedCulture(requestCulture);
         }
     }
 }

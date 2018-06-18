@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <PackageId>Fiontar.Localization</PackageId>
-    <version>0.5.0-alpha</version>
+    <version>0.6.0-alpha</version>
     <Authors>Ronan Doherty</Authors>
     <Company>Fiontar &amp; Scoil na Gaeilge, Dublin City University</Company>
   </PropertyGroup>
