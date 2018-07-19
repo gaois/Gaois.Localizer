@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Builder;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Extension method to handle requests where no culture parameter is provided

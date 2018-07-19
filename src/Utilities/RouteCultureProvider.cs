@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Determines the request's culture information

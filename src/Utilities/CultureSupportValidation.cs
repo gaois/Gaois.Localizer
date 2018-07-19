@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Provides methods to validate that a given request culture is supported by the application

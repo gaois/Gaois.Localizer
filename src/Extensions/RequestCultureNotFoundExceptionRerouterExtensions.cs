@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Builder;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Extension methods that handle a <see cref="System.Globalization.CultureNotFoundException"/> in the request pipeline by returning a page in the default culture

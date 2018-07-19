@@ -1,6 +1,6 @@
 using System;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     ///  Specifies options for the <see cref="LocalizationCookies"/> middleware

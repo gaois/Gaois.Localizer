@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Extension method to validate request culture support

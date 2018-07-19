@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
-    ///  Specifies options for various middleware provided by Fiontar.Localization
+    ///  Specifies options for various middleware provided by Gaois.Localizer
     /// </summary>
     public class RouteCultureOptions
     {
@@ -25,7 +25,7 @@ namespace Fiontar.Localization
         public IDictionary<string, string> LanguageLocaleMap { get; set; }
 
         /// <summary>
-        /// Specifies options for various middleware provided by Fiontar.Localization
+        /// Specifies options for various middleware provided by Gaois.Localizer
         /// </summary>
         public RouteCultureOptions()
         {

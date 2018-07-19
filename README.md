@@ -1,6 +1,6 @@
-# Fiontar.Localization
+# Gaois.Localizer
 
-[![NuGet](https://img.shields.io/badge/nuget-0.6.0--alpha-blue.svg)](https://www.nuget.org/packages/Fiontar.Localization/)
+[![NuGet](https://img.shields.io/badge/nuget-0.6.0--alpha-blue.svg)](https://www.nuget.org/packages/Gaois.Localizer/)
 
 A toolkit for creating multilingual web applications on ASP.NET Core. It offers a suite of configurable localisation middleware, including request culture validators, cookie management, exception handlers, and URL rewriting rules, that work alongside the framework's native [globalisation and localisation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1) functions to take the pain out of building localised websites.
 
@@ -32,7 +32,7 @@ The library was developed at [Fiontar & Scoil na Gaeilge](https://www.gaois.ie),
 
 ## What problem does it solve?
 
-The library complements native localisation tools like `IStringLocalizer`, `IHtmlLocalizer`, `IViewLocalizer`, resource files and the `CultureInfo` class. If you are not already familiar with these aspects of globalisation and localisation in ASP.NET Core you will benefit greatly from [reading up on them](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1) first. Particularly, it will explain why we use terms like request *cultures* and target *cultures*, rather than just target languages, in this document. Fiontar.Localization is mainly concerned with how the target culture is inferred from the HTTP request, i.e. how do we know which form of localised contents to display to the user.
+The library complements native localisation tools like `IStringLocalizer`, `IHtmlLocalizer`, `IViewLocalizer`, resource files and the `CultureInfo` class. If you are not already familiar with these aspects of globalisation and localisation in ASP.NET Core you will benefit greatly from [reading up on them](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1) first. Particularly, it will explain why we use terms like request *cultures* and target *cultures*, rather than just target languages, in this document. Gaois.Localizer is mainly concerned with how the target culture is inferred from the HTTP request, i.e. how do we know which form of localised contents to display to the user.
 
 ASP.NET Core does offer a [number of tools](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1#implement-a-strategy-to-select-the-languageculture-for-each-request) to this end but they are somewhat rigid, and do not account for a number of scenarios. Notably, and for various well-intentioned reasons, the `RouteDataRequestCultureProvider` does not work out of the box and requires additional configuration if you want to ascertain the request culture from URL parameters like `/fr-FR/about/`. Furthermore, it is left to the developer to cater for situations where the user attempts to access a page in a culture that is not supported by the application and to implement solutions that persist user language preferences across sessions.
 
@@ -54,13 +54,13 @@ Most of these features are configurable: sensible defaults are supplied, but you
 
 ## Install and setup
 
-Add the NuGet package [Fiontar.Localization](https://www.nuget.org/packages/Fiontar.Localization/) to any ASP.NET Core 2.1+ project.
+Add the NuGet package [Gaois.Localizer](https://www.nuget.org/packages/Gaois.Localizer/) to any ASP.NET Core 2.1+ project.
 
 ```cmd
-dotnet add package Fiontar.Localization
+dotnet add package Gaois.Localizer
 ```
 
-Then in **Startup.cs**, add `using Fiontar.Localization;` to the top of the file. All configuration of the package is done in this file. The specific configuration for your application will depend on your own needs.
+Then in **Startup.cs**, add `using Gaois.Localizer;` to the top of the file. All configuration of the package is done in this file. The specific configuration for your application will depend on your own needs.
 
 ### Basic configuration
 
@@ -144,7 +144,7 @@ The majority of the above code implements native ASP.NET Core localisation funct
 
 ## Getting the request culture
 
-The primary goal of this package is to make it easier to understand what language the user intends to use when accessing your website so that the application can set the correct culture and localise the contents for the user. To this end, Fiontar.Localization provides a `RouteCultureProvider` that interprets the HTTP request. Set it up using the *ConfigureServices* method in **Startup.cs**:
+The primary goal of this package is to make it easier to understand what language the user intends to use when accessing your website so that the application can set the correct culture and localise the contents for the user. To this end, Gaois.Localizer provides a `RouteCultureProvider` that interprets the HTTP request. Set it up using the *ConfigureServices* method in **Startup.cs**:
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -183,7 +183,7 @@ These checks are performed once the `app.UseRequestLocalization()` method is rea
 
 ### Configure the culture path parameter
 
-By default, Fiontar.Localization assumes that the first request path parameter, i.e. the `ga-IE` parameter in the URL `www.mymultilingualapp.com/ga-IE/about/our-story/`, contains the target culture information, as is common practice. You can configure the application to use a different parameter, however. Owing to the nature of the ASP.NET Core request execution pipeline you will need to specify the `CultureParameterIndex` in *two* places:
+By default, Gaois.Localizer assumes that the first request path parameter, i.e. the `ga-IE` parameter in the URL `www.mymultilingualapp.com/ga-IE/about/our-story/`, contains the target culture information, as is common practice. You can configure the application to use a different parameter, however. Owing to the nature of the ASP.NET Core request execution pipeline you will need to specify the `CultureParameterIndex` in *two* places:
 
 1. Add a `RouteCultureOptions` service to the `ConfigureServices()` method in **Startup.cs** and set the `CultureParameterIndex`:
 
@@ -211,11 +211,11 @@ In what is probably the most opinionated feature of this library, preference is 
 
 ## Unsupported cultures
 
-What happens when a user inputs a URL that contains an unsupported culture? For instance, if your site supports Spanish and Portugese content, but the user supplies an `fr-FR` region subtag in the URL. By default, the `RequestCultureValidation` middleware will cause a  `CultureNotFoundException` to be thrown in this scenario. Fiontar.Localization offers two ways to handle this error: both assume that you have already applied the request culture validation middleware, `app.UseRequestCultureValidation()` to the `Configure()` method in **Startup.cs**.
+What happens when a user inputs a URL that contains an unsupported culture? For instance, if your site supports Spanish and Portugese content, but the user supplies an `fr-FR` region subtag in the URL. By default, the `RequestCultureValidation` middleware will cause a  `CultureNotFoundException` to be thrown in this scenario. Gaois.Localizer offers two ways to handle this error: both assume that you have already applied the request culture validation middleware, `app.UseRequestCultureValidation()` to the `Configure()` method in **Startup.cs**.
 
 ### Return a 404 Not Found status code
 
-Add `app.UseRequestCultureExceptionHandler()` to the request execution pipeline *before* the request culture validation middleware. The exception handlers in Fiontar.Localization use an async method that listen for exceptions thrown as the request makes its way through the pipeline. Exception handlers applied after the error is thrown have no effect.
+Add `app.UseRequestCultureExceptionHandler()` to the request execution pipeline *before* the request culture validation middleware. The exception handlers in Gaois.Localizer use an async method that listen for exceptions thrown as the request makes its way through the pipeline. Exception handlers applied after the error is thrown have no effect.
 
 ```csharp
     app.UseRequestCultureExceptionHandler();
@@ -265,7 +265,7 @@ Routes beginning with `/error`, e.g. `/Error` or `/error/{0}/`, are added by def
 
 ## Localisation cookies
 
-When a user visits your website, they may decide to select another language via a language switcher or similar UI facility. It can be useful to store the user's preference in a cookie so that the application will 'remember' their choice and the user can pick up where they left off on their next visit. Fortunately, ASP.NET Core has a built-in [provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1#set-the-culture-programmatically) to append culture cookies to the HTTP response. Fiontar.Localization's `app.UseLocalizationCookies()` middleware wraps this provider in some useful logic that lives in the request execution pipeline: thus foregoing the need for POST requests or additional controllers to programatically set and update the user's language preferences. All you need to do is add the middleware to the `Configure()` method in **Startup.cs**:
+When a user visits your website, they may decide to select another language via a language switcher or similar UI facility. It can be useful to store the user's preference in a cookie so that the application will 'remember' their choice and the user can pick up where they left off on their next visit. Fortunately, ASP.NET Core has a built-in [provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization?view=aspnetcore-2.1#set-the-culture-programmatically) to append culture cookies to the HTTP response. Gaois.Localizer's `app.UseLocalizationCookies()` middleware wraps this provider in some useful logic that lives in the request execution pipeline: thus foregoing the need for POST requests or additional controllers to programatically set and update the user's language preferences. All you need to do is add the middleware to the `Configure()` method in **Startup.cs**:
 
 ```csharp
     app.UseRequestCultureNotFoundExceptionPage();
@@ -274,7 +274,7 @@ When a user visits your website, they may decide to select another language via 
     app.UseLocalizationCookies();
 ```
 
-When used in conjunction with Fiontar.Localization's `RouteCultureProvider` (see [above](#getting-the-request-culture)) this middleware will ensure that your site is displayed in the user's preferred culture every time they visit the homepage. Don't forget, however, that the `RouteCultureProvider` [gives precedence to the culture in the URL path parameters over any other settings](#a-word-about-seo), so, if the user follows a link to a page in a particular culture, localisation cookies will not be taken into account.
+When used in conjunction with Gaois.Localizer's `RouteCultureProvider` (see [above](#getting-the-request-culture)) this middleware will ensure that your site is displayed in the user's preferred culture every time they visit the homepage. Don't forget, however, that the `RouteCultureProvider` [gives precedence to the culture in the URL path parameters over any other settings](#a-word-about-seo), so, if the user follows a link to a page in a particular culture, localisation cookies will not be taken into account.
 
 ### Configure the localisation cookies
 
@@ -290,7 +290,7 @@ The `UseLocalizationCookies()` method takes an instance of the `LocalizationCook
 
 ## Landing page redirection
 
-When a user visits a website's homepage, e.g. `www.mymultilingualapp.com`, it may sometimes be desirable to automatically redirect them to the URL for a localised version of that page, e.g `www.mymultilingualapp.com/es`. This is not the default behaviour when using Fiontar.Localization for reasons of SEO (see below) but we recongise that it is a common use case. To turn on landing page redirection, just add `app.UseRequireCulturePathParameter()` to the `Configure()` method in **Startup.cs**. It should be the last piece of localisation middleware to be applied.
+When a user visits a website's homepage, e.g. `www.mymultilingualapp.com`, it may sometimes be desirable to automatically redirect them to the URL for a localised version of that page, e.g `www.mymultilingualapp.com/es`. This is not the default behaviour when using Gaois.Localizer for reasons of SEO (see below) but we recongise that it is a common use case. To turn on landing page redirection, just add `app.UseRequireCulturePathParameter()` to the `Configure()` method in **Startup.cs**. It should be the last piece of localisation middleware to be applied.
 
 ```csharp
     app.UseRequestCultureExceptionHandler();
@@ -309,13 +309,13 @@ Numerous approaches can be taken when localising a website's homepage. Some webs
 - Some websites (for example, [mozilla.org](https://www.mozilla.org/)) examine the browser's language preferences and implement a 301 (permanent) redirect. This is fine if you are reasonably certain that users will mostly access the application in one language. However, many browsers indefinitely cache 301 redirects, meaning that even if the user later updates their browser settings—or they access the computer in a public location such as a school or a library— the browser will always take them to the first localised version of the site that was opened in that browser.
 - Many other websites implement 302 redirects, likely for the reasons described above. However, this is both semantically incorrect (302 redirects define pages that have "Moved Temporarily") and bad for SEO as it is unclear whether web crawlers pay attention to pages with 302 redirects.
 
-That is why the default approach using the Fiontar.Localization library is not to redirect the user (i.e. the user stays on `example.com`) though the culture information will still be localised according to the criteria outlined [above](#getting-the-request-culture). We feel this gives optimal results both in terms of SEO and user experience.
+That is why the default approach using the Gaois.Localizer library is not to redirect the user (i.e. the user stays on `example.com`) though the culture information will still be localised according to the criteria outlined [above](#getting-the-request-culture). We feel this gives optimal results both in terms of SEO and user experience.
 
 ## Language tag choice
 
 The library is agnostic as to which type of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) you use in your URL to signify the target culture. The examples in this documentation use region subtags such as `ga-IE`, `en-GB`, `pt-BR`, etc. Many applications prefer ISO two-letter language codes like `ga`, `en`, `fr`. You can specify either type of tag in the supported cultures variable of your `RequestLocalizationOptions` in Startup.cs.
 
-If you do opt for two-letter language codes it can often be helpful to store a set of region or extended language subtags that map to your language codes—for example, when supplying locale data in [Open Graph](http://ogp.me/) meta tags. Fiontar.Localization facilitates this by allowing you to configure the route culture options in the `Configure()` method of **Startup.cs**:
+If you do opt for two-letter language codes it can often be helpful to store a set of region or extended language subtags that map to your language codes—for example, when supplying locale data in [Open Graph](http://ogp.me/) meta tags. Gaois.Localizer facilitates this by allowing you to configure the route culture options in the `Configure()` method of **Startup.cs**:
 
 ```csharp
 services.Configure<RouteCultureOptions>(options =>
@@ -328,7 +328,7 @@ services.Configure<RouteCultureOptions>(options =>
 The mapped tags can then be accessed elswhere in the application, and an `InferLocaleFromLanguage()` convenience function is provided to output the correct locale or region subtag when given a corresponding language code (the code shown below is taken from a Razor view):
 
 ```csharp
-@using Fiontar.Localization
+@using Gaois.Localizer
 @inject IOptions<RequestLocalizationOptions> LocalizationOptions
 @inject IOptions<RouteCultureOptions> CultureOptions
 
@@ -348,7 +348,7 @@ The mapped tags can then be accessed elswhere in the application, and an `InferL
 
 ## Migrating between language tags in a URL scheme
 
-If you wish to migrate from a URL scheme that used two-letter language tags (such as `example.com/es`) to a scheme that uses regional locales (such as `example.com/es-ES`), Fiontar.Localization includes a helpful redirection protocol that leverages ASP.NET Core's native URL rewriting middleware to take care of the hard work for you.
+If you wish to migrate from a URL scheme that used two-letter language tags (such as `example.com/es`) to a scheme that uses regional locales (such as `example.com/es-ES`), Gaois.Localizer includes a helpful redirection protocol that leverages ASP.NET Core's native URL rewriting middleware to take care of the hard work for you.
 
 First, configure the `RouteCultureOptions` service as described in the [previous section](#language-tag-choice):
 
@@ -396,8 +396,8 @@ Not yet, but one is coming in version 0.7.
 
 ## Who is using this?
 
-Fiontar.Localization has been implemented on one of Fiontar & Scoil na Gaeilge's project websites, [www.dúchas.ie](https://www.duchas.ie/) and will be rolled out across the rest of our websites over the coming year.
+Gaois.Localizer has been implemented on one of Fiontar & Scoil na Gaeilge's project websites, [www.dúchas.ie](https://www.duchas.ie/) and will be rolled out across the rest of our websites over the coming year.
 
 ## Credits
 
-The Fiontar.Localization library is authored by [Ronan Doherty](https://github.com/rodoch), but much credit is due to his colleagues [Michal Boleslav Měchura](https://github.com/michmech) and [Brian Ó Raghallaigh](https://github.com/oraghalb). The former's book *[An Ríomhaire Ilteangach](http://www.lexiconista.com/arit/)* is a font of quality guidance in these matters.
+The Gaois.Localizer library is authored by [Ronan Doherty](https://github.com/rodoch), but much credit is due to his colleagues [Michal Boleslav Měchura](https://github.com/michmech) and [Brian Ó Raghallaigh](https://github.com/oraghalb). The former's book *[An Ríomhaire Ilteangach](http://www.lexiconista.com/arit/)* is a font of quality guidance in these matters.

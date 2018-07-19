@@ -2,7 +2,7 @@
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     internal static class LoggerExtensions
     {

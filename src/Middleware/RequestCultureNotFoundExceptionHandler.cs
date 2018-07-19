@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Causes a 404 Not Found HTTP status code to returned when a <see cref="System.Globalization.CultureNotFoundException"/> is thrown in the request execution pipeline

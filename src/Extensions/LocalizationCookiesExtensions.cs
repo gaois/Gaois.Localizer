@@ -1,7 +1,6 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Extension methods to store localization data in a user cookie
