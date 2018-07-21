@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Stores current request culture in a user cookie 
@@ -13,16 +15,22 @@ namespace Fiontar.Localization
     public class LocalizationCookies
     {
         private readonly RequestDelegate Next;
+        private readonly IOptions<RouteCultureOptions> RouteCultureOptions;
         private readonly ILogger Logger;
+
         private readonly DateTimeOffset? CookieExpires;
         private readonly bool CookieIsEssential;
 
         /// <summary>
         /// Stores current request culture in a user cookie
         /// </summary>
-        public LocalizationCookies(RequestDelegate next, ILogger<LocalizationCookies> logger)
+        public LocalizationCookies(
+            RequestDelegate next, 
+            IOptions<RouteCultureOptions> routeCultureOptions,
+            ILogger<LocalizationCookies> logger)
         {
             Next = next;
+            RouteCultureOptions = routeCultureOptions;
             Logger = logger;
             CookieExpires = DateTimeOffset.UtcNow.AddYears(1);
             CookieIsEssential = false;
@@ -31,9 +39,14 @@ namespace Fiontar.Localization
         /// <summary>
         /// Stores current request culture in a user cookie
         /// </summary>
-        public LocalizationCookies(RequestDelegate next, ILogger<LocalizationCookies> logger, LocalizationCookiesOptions options)
+        public LocalizationCookies(
+            RequestDelegate next,
+            IOptions<RouteCultureOptions> routeCultureOptions,
+            ILogger<LocalizationCookies> logger,
+            LocalizationCookiesOptions options)
         {
             Next = next;
+            RouteCultureOptions = routeCultureOptions;
             Logger = logger;
             CookieExpires = options.Expires;
             CookieIsEssential = options.IsEssential;
@@ -49,8 +62,16 @@ namespace Fiontar.Localization
         public Task Invoke(HttpContext context)
         {
             var request = context.Request;
+            var path = request.Path;
+            var excludedRoutes = RouteCultureOptions.Value.ExcludedRoutes ?? new List<string>();
+
+            if (ExcludedRouteProvider.IsExcludedRoute(excludedRoutes, path))
+            {
+                return Next(context);
+            }
+
             string locale = CultureInfo.CurrentCulture.Name;
-            string cookie = request.Cookies[".AspNetCore.Culture"];
+            string cookie = CookieRequestCultureProvider.DefaultCookieName;
 
             if (!string.IsNullOrEmpty(cookie))
             {
@@ -65,7 +86,7 @@ namespace Fiontar.Localization
             var response = context.Response;
             
             response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
+                cookie, 
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture: locale, uiCulture: locale)),
                 new CookieOptions { Expires = CookieExpires, IsEssential = CookieIsEssential }
             );

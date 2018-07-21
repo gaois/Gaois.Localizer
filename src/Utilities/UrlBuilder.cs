@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Utility methods that make it easier to construct URLs

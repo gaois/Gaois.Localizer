@@ -1,4 +1,4 @@
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Provides methods to extract culture values from a <see cref="Microsoft.AspNetCore.Localization.CookieRequestCultureProvider"/> cookie

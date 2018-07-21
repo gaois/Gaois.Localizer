@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Builder;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Extension method that handles a <see cref="System.Globalization.CultureNotFoundException"/> in the request pipeline by returning a 404 HTTP response code

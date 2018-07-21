@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Redirects a request containing a two- or three-letter ISO language code to a URL containing another supported culture

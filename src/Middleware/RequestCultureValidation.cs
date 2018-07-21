@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Verifies that the request culture is supported by the application
@@ -34,13 +35,14 @@ namespace Fiontar.Localization
         /// </summary>
         public Task Invoke(HttpContext context)
         {
+            var path = context.Request.Path;
             var parameters = context.Request.Path.Value.Split('/');
             var culture = parameters[RouteCultureOptions.Value.CultureParameterIndex];
-            var nonCultures = RouteCultureOptions.Value.NonCultures ?? new List<string>();
+            var excludedRoutes = RouteCultureOptions.Value.ExcludedRoutes ?? new List<string>();
 
-            nonCultures = AddDefaultNonCultures(nonCultures);
+            excludedRoutes = AddDefaultNonCultures(excludedRoutes);
 
-            if (nonCultures.Count > 0 && nonCultures.Contains(culture))
+            if (ExcludedRouteProvider.IsExcludedRoute(excludedRoutes, path))
             {
                 return Next(context);
             }
@@ -57,10 +59,10 @@ namespace Fiontar.Localization
         /// <summary>
         /// Protects against circular culture exception errors when an error view is called
         /// </summary>
-        private IList<string> AddDefaultNonCultures(IList<string> nonCultures)
+        private IList<string> AddDefaultNonCultures(IList<string> excludedRoutes)
         {
-            nonCultures.Add("Error");
-            return nonCultures;
+            excludedRoutes.Add("Error");
+            return excludedRoutes;
         }
 
         /// <summary>

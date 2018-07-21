@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 
-namespace Fiontar.Localization
+namespace Gaois.Localizer
 {
     /// <summary>
     /// Causes the request to be redirected to a page in the default culture when a <see cref="System.Globalization.CultureNotFoundException"/> is thrown in the request execution pipeline
