@@ -61,11 +61,11 @@ Add the NuGet package [Gaois.Localizer](https://www.nuget.org/packages/Gaois.Loc
 dotnet add package Gaois.Localizer
 ```
 
-Then in **Startup.cs**, add `using Gaois.Localizer;` to the top of the file. All configuration of the package is done in this file. The specific configuration for your application will depend on your own needs.
+Then in **Startup.cs**, add the `using Gaois.Localizer` directive to the top of the file. All configuration of the package is done in this file. The specific configuration for your application will depend on your own needs.
 
 ### Basic configuration
 
-1. Add the `app.UseLocalizer()` middleware to the `Configure` method anywhere after `app.UseStaticFiles` (if present) and before `app.UseMvc()`, like so:
+1. Add the `app.UseLocalizer()` middleware to the *Configure* method anywhere after `app.UseStaticFiles` (if present) and before `app.UseMvc()`, like so:
 
 ```csharp
 public void Configure(IApplicationBuilder app, IHostingEnvironment env)
