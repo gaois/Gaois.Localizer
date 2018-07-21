@@ -93,10 +93,6 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 }
 ```
 
-**
-`app.UseRequestLocalization()` activates ASP.NET Core's native localisation middleware to automatically set culture information for requests based on information provided by the client. `app.UseRequestCultureValidation()` verifies that the requested culture is supported by the application. `app.UseRequestCultureExceptionHandler()` implements an exception handler that will return a 404 Not Found status code in the HTTP response if the client attempts to access a page in a culture that is unsupported or unavailable.
-**
-
 2. Modify the *ConfigureServices* method:
 
 ```csharp
@@ -222,7 +218,7 @@ services.AddLocalizer(options =>
     ...
     options.RequestCultureRerouter.RerouteRequestCultureExceptions = true;
     options.RequestCultureRerouter.StatusCode = 301;
-    options.RequestCultureRerouter.ResponsePath = "/en-GB/lost/;
+    options.RequestCultureRerouter.ResponsePath = "/en-GB/lost/";
 });
 ```
 
@@ -271,7 +267,7 @@ services.AddLocalizer(options =>
 
 ## Landing page redirection
 
-When a user visits a website's homepage, e.g. `www.mymultilingualapp.com`, it may sometimes be desirable to automatically redirect them to the URL for a localised version of that page, e.g `www.mymultilingualapp.com/es`. This is not the default behaviour when using Gaois.Localizer for reasons of SEO (see below) but we recongise that it is a common use case. To turn on landing page redirection, again just configure the `AddLocalizer` method in **Startup.cs**:
+When a user visits a website's homepage, e.g. `www.mymultilingualapp.com`, it may sometimes be desirable to automatically redirect them to the URL for a localised version of that page, e.g `www.mymultilingualapp.com/es`. This is not the default behaviour when using Gaois.Localizer for reasons of SEO (see below) but we recongise that it is a common use case. To turn on landing page redirection, again just configure the *AddLocalizer* method in **Startup.cs**:
 
 ```csharp
 services.AddLocalizer(options =>
@@ -296,7 +292,7 @@ That is why the default approach using the Gaois.Localizer library is not to red
 
 The library is agnostic as to which type of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) you use in your URL to signify the target culture. The examples in this documentation use region subtags such as `ga-IE`, `en-GB`, `pt-BR`, etc. Many applications prefer ISO two-letter language codes like `ga`, `en`, `fr`. You can specify either type of tag in the supported cultures variable of your `RequestLocalizationOptions` in Startup.cs.
 
-If you do opt for two-letter language codes it can often be helpful to store a set of region or extended language subtags that map to your language codes—for example, when supplying locale data in [Open Graph](http://ogp.me/) meta tags. Gaois.Localizer facilitates this by allowing you to configure the route culture options in the `Configure()` method of **Startup.cs**:
+If you do opt for two-letter language codes it can often be helpful to store a set of region or extended language subtags that map to your language codes—for example, when supplying locale data in [Open Graph](http://ogp.me/) meta tags. Gaois.Localizer facilitates this by allowing you to configure the route culture options in the *Configure* method of **Startup.cs**:
 
 ```csharp
 services.AddLocalizer(options =>
