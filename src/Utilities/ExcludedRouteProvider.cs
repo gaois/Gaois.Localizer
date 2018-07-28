@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 
@@ -22,7 +23,7 @@ namespace Gaois.Localizer
                 return false;
             }
 
-            foreach (string route in excludedRoutes)
+            foreach (string route in excludedRoutes.ToList())
             {
                 Regex regex = new Regex(route, RegexOptions.Compiled);
                 Match match = regex.Match(path);
