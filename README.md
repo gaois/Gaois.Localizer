@@ -375,10 +375,6 @@ Now, all requests to `www.mymultilingualapp.com/ga/about/` will be automatically
 
 Not yet, but one is coming in version 0.7.
 
-## Who is using this?
-
-Gaois.Localizer has been implemented on one of Fiontar & Scoil na Gaeilge's project websites, [www.dúchas.ie](https://www.duchas.ie/) and will be rolled out across the rest of our websites over the coming year.
-
 ## Credits
 
 The Gaois.Localizer library is authored by [Ronan Doherty](https://github.com/rodoch), but much credit is due to his colleagues [Michal Boleslav Měchura](https://github.com/michmech) and [Brian Ó Raghallaigh](https://github.com/oraghalb). The former's book *[An Ríomhaire Ilteangach](http://www.lexiconista.com/arit/)* is a font of quality guidance in these matters.
