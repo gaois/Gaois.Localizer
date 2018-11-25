@@ -18,7 +18,7 @@ namespace Gaois.Localizer
         /// <param name="path">The request path</param>
         public static bool IsExcludedRoute(IList<string> excludedRoutes, PathString path)
         {
-            if (excludedRoutes.Count <= 0)
+            if (excludedRoutes is null || excludedRoutes.Count <= 0)
             {
                 return false;
             }
