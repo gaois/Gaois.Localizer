@@ -39,8 +39,6 @@ namespace Gaois.Localizer
             var culture = parameters[_routeCultureOptions.Value.CultureParameterIndex];
             var excludedRoutes = _routeCultureOptions.Value.ExcludedRoutes ?? new List<string>();
 
-            excludedRoutes = AddDefaultNonCultures(excludedRoutes);
-
             if (ExcludedRouteProvider.IsExcludedRoute(excludedRoutes, path))
             {
                 return _next(context);
@@ -53,15 +51,6 @@ namespace Gaois.Localizer
             {
                 throw new CultureNotFoundException();
             }
-        }
-
-        /// <summary>
-        /// Protects against circular culture exception errors when an error view is called
-        /// </summary>
-        private IList<string> AddDefaultNonCultures(IList<string> excludedRoutes)
-        {
-            excludedRoutes.Add("Error");
-            return excludedRoutes;
         }
 
         /// <summary>
