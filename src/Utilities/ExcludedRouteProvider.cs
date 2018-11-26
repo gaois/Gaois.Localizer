@@ -18,15 +18,17 @@ namespace Gaois.Localizer
         /// <param name="path">The request path</param>
         public static bool IsExcludedRoute(IList<string> excludedRoutes, PathString path)
         {
-            if (excludedRoutes is null || excludedRoutes.Count <= 0)
+            var routes = excludedRoutes as List<string>;
+
+            if (routes is null || routes.Count <= 0)
             {
                 return false;
             }
 
-            foreach (string route in excludedRoutes.ToList())
+            foreach (string route in routes)
             {
-                Regex regex = new Regex(route, RegexOptions.Compiled);
-                Match match = regex.Match(path);
+                var regex = new Regex(route, RegexOptions.Compiled);
+                var match = regex.Match(path);
 
                 if (match.Success)
                 {

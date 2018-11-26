@@ -15,11 +15,11 @@ namespace Gaois.Localizer
     /// </summary>
     public class RequireCulturePathParameter
     {
-        private readonly RequestDelegate Next;
-        private readonly IOptions<RouteOptions> RouteOptions;
-        private readonly IOptions<RouteCultureOptions> RouteCultureOptions;
-        private readonly ILogger Logger;
-        private readonly int StatusCode;
+        private readonly RequestDelegate _next;
+        private readonly IOptions<RouteOptions> _routeOptions;
+        private readonly IOptions<RouteCultureOptions> _routeCultureOptions;
+        private readonly ILogger _logger;
+        private readonly int _statusCode;
 
         /// <summary>
         /// Redirects the request to a localized root path if the URL contains no culture parameter
@@ -31,11 +31,11 @@ namespace Gaois.Localizer
             ILogger<RequireCulturePathParameter> logger, 
             int statusCode)
         {
-            Next = next;
-            RouteOptions = routeOptions;
-            RouteCultureOptions = routeCultureOptions;
-            Logger = logger;
-            StatusCode = statusCode;
+            _next = next;
+            _routeOptions = routeOptions;
+            _routeCultureOptions = routeCultureOptions;
+            _logger = logger;
+            _statusCode = statusCode;
         }
 
         /// <summary>
@@ -48,24 +48,24 @@ namespace Gaois.Localizer
         {
             var request = context.Request;
             var parameters = request.Path.Value.Split('/');
-            var culture = parameters[RouteCultureOptions.Value.CultureParameterIndex];
+            var culture = parameters[_routeCultureOptions.Value.CultureParameterIndex];
 
             if (!string.IsNullOrEmpty(culture))
             {
-                return Next(context);
+                return _next(context);
             }
 
             string newPath = "/" + CultureInfo.CurrentCulture.Name;
-            newPath += (RouteOptions.Value.AppendTrailingSlash == true) ? "/" : string.Empty;
+            newPath += (_routeOptions.Value.AppendTrailingSlash == true) ? "/" : string.Empty;
             string newUrl = UrlBuilder.ReplacePath(request, newPath);
 
-            Logger.LogRequiredCultureRedirect(newPath);
+            _logger.LogRequiredCultureRedirect(newPath);
 
             context.Response.Clear();
-            context.Response.StatusCode = StatusCode;
+            context.Response.StatusCode = _statusCode;
             context.Response.Headers[HeaderNames.Location] = newUrl;
 
-            return Next(context);
+            return _next(context);
         }
     }
 }

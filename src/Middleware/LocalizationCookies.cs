@@ -14,12 +14,11 @@ namespace Gaois.Localizer
     /// </summary>
     public class LocalizationCookies
     {
-        private readonly RequestDelegate Next;
-        private readonly IOptions<RouteCultureOptions> RouteCultureOptions;
-        private readonly ILogger Logger;
-
-        private readonly DateTimeOffset? CookieExpires;
-        private readonly bool CookieIsEssential;
+        private readonly RequestDelegate _next;
+        private readonly IOptions<RouteCultureOptions> _routeCultureOptions;
+        private readonly ILogger _logger;
+        private readonly DateTimeOffset? _cookieExpires;
+        private readonly bool _cookieIsEssential;
 
         /// <summary>
         /// Stores current request culture in a user cookie
@@ -29,11 +28,11 @@ namespace Gaois.Localizer
             IOptions<RouteCultureOptions> routeCultureOptions,
             ILogger<LocalizationCookies> logger)
         {
-            Next = next;
-            RouteCultureOptions = routeCultureOptions;
-            Logger = logger;
-            CookieExpires = DateTimeOffset.UtcNow.AddYears(1);
-            CookieIsEssential = false;
+            _next = next;
+            _routeCultureOptions = routeCultureOptions;
+            _logger = logger;
+            _cookieExpires = DateTimeOffset.UtcNow.AddYears(1);
+            _cookieIsEssential = false;
         }
 
         /// <summary>
@@ -45,11 +44,11 @@ namespace Gaois.Localizer
             ILogger<LocalizationCookies> logger,
             LocalizationCookiesOptions options)
         {
-            Next = next;
-            RouteCultureOptions = routeCultureOptions;
-            Logger = logger;
-            CookieExpires = options.Expires;
-            CookieIsEssential = options.IsEssential;
+            _next = next;
+            _routeCultureOptions = routeCultureOptions;
+            _logger = logger;
+            _cookieExpires = options.Expires;
+            _cookieIsEssential = options.IsEssential;
         }
 
         /// <summary>
@@ -63,11 +62,11 @@ namespace Gaois.Localizer
         {
             var request = context.Request;
             var path = request.Path;
-            var excludedRoutes = RouteCultureOptions.Value.ExcludedRoutes ?? new List<string>();
+            var excludedRoutes = _routeCultureOptions.Value.ExcludedRoutes ?? new List<string>();
 
             if (ExcludedRouteProvider.IsExcludedRoute(excludedRoutes, path))
             {
-                return Next(context);
+                return _next(context);
             }
 
             string locale = CultureInfo.CurrentCulture.Name;
@@ -79,21 +78,20 @@ namespace Gaois.Localizer
 
                 if (cookieCulture == locale)
                 {
-                    return Next(context);
+                    return _next(context);
                 }
             }
 
             var response = context.Response;
             
             response.Cookies.Append(
-                cookie, 
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture: locale, uiCulture: locale)),
-                new CookieOptions { Expires = CookieExpires, IsEssential = CookieIsEssential }
+                cookie, CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture: locale, uiCulture: locale)),
+                    new CookieOptions { Expires = _cookieExpires, IsEssential = _cookieIsEssential }
             );
             
-            Logger.LogLocalizationCookieAppended(request.Path);
+            _logger.LogLocalizationCookieAppended(request.Path);
             
-            return Next(context);
+            return _next(context);
         }
     }
 }

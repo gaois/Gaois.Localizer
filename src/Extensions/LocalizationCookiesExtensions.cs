@@ -21,7 +21,8 @@ namespace Gaois.Localizer
         /// </summary>
         /// <param name="builder">The <see cref="IApplicationBuilder"/></param>
         /// <param name="options">The <see cref="LocalizationCookiesOptions"/> to configure the middleware with</param>
-        public static IApplicationBuilder UseLocalizationCookies(this IApplicationBuilder builder, 
+        public static IApplicationBuilder UseLocalizationCookies(
+            this IApplicationBuilder builder, 
             LocalizationCookiesOptions options)
         {
             return builder.UseMiddleware<LocalizationCookies>(options);

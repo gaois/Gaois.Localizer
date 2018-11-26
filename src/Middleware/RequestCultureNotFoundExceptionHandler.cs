@@ -11,16 +11,16 @@ namespace Gaois.Localizer
     /// </summary>
     public class RequestCultureExceptionHandler
     {
-        private readonly RequestDelegate Next;
-        private readonly ILogger Logger;
+        private readonly RequestDelegate _next;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Causes a 404 Not Found HTTP status code to returned when a <see cref="System.Globalization.CultureNotFoundException"/> is thrown in the request execution pipeline
         /// </summary>
         public RequestCultureExceptionHandler(RequestDelegate next, ILogger<RequestCultureExceptionHandler> logger)
         {
-            Next = next ?? throw new CultureNotFoundException(nameof(next));
-            Logger = logger;
+            _next = next ?? throw new CultureNotFoundException(nameof(next));
+            _logger = logger;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Gaois.Localizer
         {
             try
             {
-                await Next(context);
+                await _next(context);
             }
             catch (CultureNotFoundException)
             {
@@ -39,7 +39,7 @@ namespace Gaois.Localizer
                     throw;
                 }
 
-                Logger.LogRequestCultureNotFound(context.Request.Path);
+                _logger.LogRequestCultureNotFound(context.Request.Path);
 
                 context.Response.Clear();
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
