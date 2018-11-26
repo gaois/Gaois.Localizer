@@ -6,7 +6,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>A toolkit for creating multilingual ASP.NET Core web applications.</Description>
-    <Version>0.6.3-alpha</Version>
+    <Version>0.6.4-alpha</Version>
     <PackageTags>localization globalization internationalization web</PackageTags>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/gaois/Gaois.Localizer/</RepositoryUrl>
