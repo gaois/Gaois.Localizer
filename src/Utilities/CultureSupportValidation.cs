@@ -28,7 +28,7 @@ namespace Gaois.Localizer
         /// <param name="requestCulture">The culture provided in the request</param>
         public bool IsSupportedCulture(string requestCulture)
         {
-            var supportedUICultures = _localizationOptions.Value.SupportedUICultures as List<CultureInfo>;
+            var supportedUICultures = _localizationOptions.Value.SupportedUICultures;
 
             if (supportedUICultures is null)
             {

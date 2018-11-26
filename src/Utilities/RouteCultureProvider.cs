@@ -59,30 +59,26 @@ namespace Gaois.Localizer
 
                 // If culture is present in HTTP Accept-Language header
                 var acceptLanguages = context.Request.Headers["Accept-Language"].ToString().Split(',');
-                var supportedCultures = _supportedCultures as List<CultureInfo>;
 
-                if (supportedCultures != null)
+                foreach (var supportedCulture in _supportedCultures)
                 {
-                    foreach (var supportedCulture in supportedCultures)
+                    if (acceptLanguages.Contains(supportedCulture.Name)
+                        || acceptLanguages.Contains(supportedCulture.TwoLetterISOLanguageName)
+                        || acceptLanguages.Contains(supportedCulture.ThreeLetterISOLanguageName))
                     {
-                        if (acceptLanguages.Contains(supportedCulture.Name)
-                            || acceptLanguages.Contains(supportedCulture.TwoLetterISOLanguageName)
-                            || acceptLanguages.Contains(supportedCulture.ThreeLetterISOLanguageName))
-                        {
-                            locale = supportedCulture.Name;
-                            break;
-                        }
+                        locale = supportedCulture.Name;
+                        break;
                     }
                 }
 
                 // If culture is present in request cookies
                 string cookie = context.Request.Cookies[".AspNetCore.Culture"];
 
-                if (!string.IsNullOrEmpty(cookie) && supportedCultures != null)
+                if (!string.IsNullOrEmpty(cookie))
                 {
                     string cultureCookie = CookieCultureProvider.GetCultureFromCookie(cookie);
 
-                    foreach (var supportedCulture in supportedCultures)
+                    foreach (var supportedCulture in _supportedCultures)
                     {
                         if (cultureCookie == supportedCulture.Name
                             || cultureCookie == supportedCulture.TwoLetterISOLanguageName
