@@ -11,7 +11,8 @@ namespace Gaois.Localizer
         /// <summary>
         /// Adds middleware to redirect the request to a localized path when no culture parameter is provided
         /// </summary>
-        public static IApplicationBuilder UseRequireCulturePathParameter(this IApplicationBuilder builder, 
+        public static IApplicationBuilder UseRequireCulturePathParameter(
+            this IApplicationBuilder builder, 
             int statusCode = (int)HttpStatusCode.Redirect)
         {
             return builder.UseMiddleware<RequireCulturePathParameter>(statusCode);

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -13,9 +12,9 @@ namespace Gaois.Localizer
     /// </summary>
     public class RequestCultureValidation
     {
-        private readonly RequestDelegate Next;
-        private readonly IOptions<RequestLocalizationOptions> LocalizationOptions;
-        private readonly IOptions<RouteCultureOptions> RouteCultureOptions;
+        private readonly RequestDelegate _next;
+        private readonly IOptions<RequestLocalizationOptions> _localizationOptions;
+        private readonly IOptions<RouteCultureOptions> _routeCultureOptions;
     
         /// <summary>
         /// Verifies that the request culture is supported by the application
@@ -25,9 +24,9 @@ namespace Gaois.Localizer
             IOptions<RequestLocalizationOptions> localizationOptions, 
             IOptions<RouteCultureOptions> routeCultureOptions)
         {
-            Next = next;
-            LocalizationOptions = localizationOptions;
-            RouteCultureOptions = routeCultureOptions;
+            _next = next;
+            _localizationOptions = localizationOptions;
+            _routeCultureOptions = routeCultureOptions;
         }
 
         /// <summary>
@@ -37,32 +36,21 @@ namespace Gaois.Localizer
         {
             var path = context.Request.Path;
             var parameters = context.Request.Path.Value.Split('/');
-            var culture = parameters[RouteCultureOptions.Value.CultureParameterIndex];
-            var excludedRoutes = RouteCultureOptions.Value.ExcludedRoutes ?? new List<string>();
-
-            excludedRoutes = AddDefaultNonCultures(excludedRoutes);
+            var culture = parameters[_routeCultureOptions.Value.CultureParameterIndex];
+            var excludedRoutes = _routeCultureOptions.Value.ExcludedRoutes ?? new List<string>();
 
             if (ExcludedRouteProvider.IsExcludedRoute(excludedRoutes, path))
             {
-                return Next(context);
+                return _next(context);
             }
             else if (IsSupportedCulture(culture))
             {
-                return Next(context);
+                return _next(context);
             }
             else
             {
                 throw new CultureNotFoundException();
             }
-        }
-
-        /// <summary>
-        /// Protects against circular culture exception errors when an error view is called
-        /// </summary>
-        private IList<string> AddDefaultNonCultures(IList<string> excludedRoutes)
-        {
-            excludedRoutes.Add("Error");
-            return excludedRoutes;
         }
 
         /// <summary>
@@ -76,7 +64,7 @@ namespace Gaois.Localizer
                 return true;
             }
             
-            var culture = new CultureSupportValidation(LocalizationOptions);
+            var culture = new CultureSupportValidation(_localizationOptions);
             return culture.IsSupportedCulture(requestCulture);
         }
     }

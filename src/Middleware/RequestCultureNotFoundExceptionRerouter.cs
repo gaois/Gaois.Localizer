@@ -14,11 +14,11 @@ namespace Gaois.Localizer
     /// </summary>
     public class RequestCultureExceptionRerouter
     {
-        private readonly RequestDelegate Next;
-        private readonly IOptions<RouteCultureOptions> RouteCultureOptions;
-        private readonly ILogger Logger;
-        private readonly int StatusCode;
-        private readonly string ResponsePath;
+        private readonly RequestDelegate _next;
+        private readonly IOptions<RouteCultureOptions> _routeCultureOptions;
+        private readonly ILogger _logger;
+        private readonly int _statusCode;
+        private readonly string _responsePath;
 
         /// <summary>
         /// Causes the request to be redirected to a page in the default culture when a <see cref="System.Globalization.CultureNotFoundException"/> is thrown in the request execution pipeline
@@ -28,10 +28,10 @@ namespace Gaois.Localizer
             IOptions<RouteCultureOptions> routeCultureOptions,
             ILogger<RequestCultureExceptionRerouter> logger)
         {
-            Next = next ?? throw new CultureNotFoundException(nameof(next));
-            RouteCultureOptions = routeCultureOptions;
-            Logger = logger;
-            StatusCode = (int)HttpStatusCode.Redirect;
+            _next = next ?? throw new CultureNotFoundException(nameof(next));
+            _routeCultureOptions = routeCultureOptions;
+            _logger = logger;
+            _statusCode = (int)HttpStatusCode.Redirect;
         }
 
         /// <summary>
@@ -47,11 +47,11 @@ namespace Gaois.Localizer
             ILogger<LocalizationCookies> logger, 
             RequestCultureRerouterOptions options)
         {
-            Next = next ?? throw new CultureNotFoundException(nameof(next));
-            RouteCultureOptions = routeCultureOptions;
-            Logger = logger;
-            StatusCode = options.StatusCode;
-            ResponsePath = options.ResponsePath;
+            _next = next ?? throw new CultureNotFoundException(nameof(next));
+            _routeCultureOptions = routeCultureOptions;
+            _logger = logger;
+            _statusCode = options.StatusCode;
+            _responsePath = options.ResponsePath;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Gaois.Localizer
         {
             try
             {
-                await Next(context);
+                await _next(context);
             }
             catch (CultureNotFoundException)
             {
@@ -72,15 +72,15 @@ namespace Gaois.Localizer
 
                 var request = context.Request;
                 var parts = request.Path.Value.Split('/');
-                parts[RouteCultureOptions.Value.CultureParameterIndex] = CultureInfo.CurrentCulture.Name;
+                parts[_routeCultureOptions.Value.CultureParameterIndex] = CultureInfo.CurrentCulture.Name;
 
-                string newPath = (string.IsNullOrEmpty(ResponsePath)) ? string.Join("/", parts) : ResponsePath;
+                string newPath = (string.IsNullOrEmpty(_responsePath)) ? string.Join("/", parts) : _responsePath;
                 string newUrl = UrlBuilder.ReplacePath(request, newPath);
 
-                Logger.LogRequestCultureNotFoundRedirect(newPath);
+                _logger.LogRequestCultureNotFoundRedirect(newPath);
 
                 context.Response.Clear();
-                context.Response.StatusCode = StatusCode;
+                context.Response.StatusCode = _statusCode;
                 context.Response.Headers[HeaderNames.Location] = newUrl;
 
                 return;

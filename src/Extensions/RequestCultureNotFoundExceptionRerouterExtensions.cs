@@ -27,7 +27,8 @@ namespace Gaois.Localizer
         /// </remarks>
         /// <param name="builder">The <see cref="IApplicationBuilder"/></param>
         /// <param name="options">The <see cref="RequestCultureRerouterOptions"/> to configure the middleware with</param>
-        public static IApplicationBuilder UseRequestCultureExceptionRerouter(this IApplicationBuilder builder, 
+        public static IApplicationBuilder UseRequestCultureExceptionRerouter(
+            this IApplicationBuilder builder, 
             RequestCultureRerouterOptions options)
         {
             return builder.UseMiddleware<RequestCultureExceptionRerouter>(options);

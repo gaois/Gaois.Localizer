@@ -18,7 +18,9 @@ namespace Gaois.Localizer
         /// <param name="services">The services collection to configure.</param>
         /// <param name="configureSettings">An <see cref="Action{LocalizerOptions}"/> to configure the localizer options</param>
         /// <returns>Returns an <see cref="IServiceCollection"/> object</returns>
-        public static IServiceCollection AddLocalizer(this IServiceCollection services, Action<LocalizerOptions> configureSettings = null)
+        public static IServiceCollection AddLocalizer(
+            this IServiceCollection services, 
+            Action<LocalizerOptions> configureSettings = null)
         {
             if (configureSettings == null)
             {

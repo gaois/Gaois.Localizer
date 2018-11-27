@@ -18,11 +18,10 @@ namespace Gaois.Localizer
     /// </remarks>
     public class RouteCultureProvider : IRequestCultureProvider
     {
-        private readonly CultureInfo DefaultCulture;
-        private readonly CultureInfo DefaultUICulture;
-        private readonly int CultureParameterIndex;
-        
-        private readonly IList<CultureInfo>  SupportedCultures;
+        private readonly IList<CultureInfo>  _supportedCultures;
+        private readonly CultureInfo _defaultCulture;
+        private readonly CultureInfo _defaultUICulture;
+        private readonly int _cultureParameterIndex;
 
         /// <summary>
         /// Determines the request's culture information
@@ -39,10 +38,10 @@ namespace Gaois.Localizer
             RequestCulture requestCulture, 
             int cultureParameterIndex = 1)
         {
-            SupportedCultures = supportedCultures;
-            DefaultCulture = requestCulture.Culture;
-            DefaultUICulture = requestCulture.UICulture;
-            CultureParameterIndex = cultureParameterIndex;
+            _supportedCultures = supportedCultures;
+            _defaultCulture = requestCulture.Culture;
+            _defaultUICulture = requestCulture.UICulture;
+            _cultureParameterIndex = cultureParameterIndex;
         }
 
         /// <summary>
@@ -56,12 +55,12 @@ namespace Gaois.Localizer
             if (url.ToString().Length <= 1)
             {
                 // Establish default culture, it will be updated if subsequent criteria are met
-                string locale = DefaultCulture.Name;
+                string locale = _defaultCulture.Name;
 
                 // If culture is present in HTTP Accept-Language header
                 var acceptLanguages = context.Request.Headers["Accept-Language"].ToString().Split(',');
 
-                foreach (var supportedCulture in SupportedCultures)
+                foreach (var supportedCulture in _supportedCultures)
                 {
                     if (acceptLanguages.Contains(supportedCulture.Name)
                         || acceptLanguages.Contains(supportedCulture.TwoLetterISOLanguageName)
@@ -79,7 +78,7 @@ namespace Gaois.Localizer
                 {
                     string cultureCookie = CookieCultureProvider.GetCultureFromCookie(cookie);
 
-                    foreach (var supportedCulture in SupportedCultures)
+                    foreach (var supportedCulture in _supportedCultures)
                     {
                         if (cultureCookie == supportedCulture.Name
                             || cultureCookie == supportedCulture.TwoLetterISOLanguageName
@@ -95,12 +94,12 @@ namespace Gaois.Localizer
             }
 
             var parameters = context.Request.Path.Value.Split('/');
-            var culture = parameters[CultureParameterIndex];
+            var culture = parameters[_cultureParameterIndex];
 
             // If culture is not formatted correctly, return default culture
             if (!Regex.IsMatch(culture, @"^[a-z]{2}(-[A-Z]{2})*$"))
             {
-                return Task.FromResult<ProviderCultureResult>(new ProviderCultureResult(DefaultCulture.Name, DefaultUICulture.Name));
+                return Task.FromResult<ProviderCultureResult>(new ProviderCultureResult(_defaultCulture.Name, _defaultUICulture.Name));
             }
 
             // Otherwise, return Culture and UICulture from route culture parameter

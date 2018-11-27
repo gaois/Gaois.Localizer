@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 
@@ -9,7 +11,7 @@ namespace Gaois.Localizer
     /// </summary>
     public class CultureSupportValidation
     {
-        private readonly IOptions<RequestLocalizationOptions> LocalizationOptions;
+        private readonly IOptions<RequestLocalizationOptions> _localizationOptions;
 
         /// <summary>
         /// Provides methods to validate that a given request culture is supported by the application
@@ -17,7 +19,7 @@ namespace Gaois.Localizer
         /// <param name="options">The <see cref="RequestLocalizationOptions"/> that define the supported cultures</param>
         public CultureSupportValidation(IOptions<RequestLocalizationOptions> options)
         {  
-            LocalizationOptions = options;
+            _localizationOptions = options;
         }
 
         /// <summary>
@@ -26,9 +28,16 @@ namespace Gaois.Localizer
         /// <param name="requestCulture">The culture provided in the request</param>
         public bool IsSupportedCulture(string requestCulture)
         {
-            List<string> supportedCultures = new List<string>();
+            var supportedUICultures = _localizationOptions.Value.SupportedUICultures;
 
-            foreach (var culture in LocalizationOptions.Value.SupportedUICultures)
+            if (supportedUICultures is null)
+            {
+                return false;
+            }
+            
+            var supportedCultures = new List<string>();
+            
+            foreach (var culture in supportedUICultures)
             {
                 supportedCultures.Add(culture.Name);
             }

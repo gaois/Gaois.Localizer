@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Options;
@@ -16,9 +17,9 @@ namespace Gaois.Localizer
     /// </remarks>
     public class RedirectLanguageToLocale : IRule
     {
-        private readonly IOptions<RouteCultureOptions> RouteCultureOptions;
-        private readonly IDictionary<string, string> LanguageLocaleMap;
-        private readonly int StatusCode;
+        private readonly IOptions<RouteCultureOptions> _routeCultureOptions;
+        private readonly IDictionary<string, string> _languageLocaleMap;
+        private readonly int _statusCode;
 
 
         /// <summary>
@@ -27,35 +28,35 @@ namespace Gaois.Localizer
         /// <param name="routeCultureOptions">The <see cref="RouteCultureOptions"/> to configure the redirect rule with</param>
         /// <param name="statusCode">The HTTP status code to return in the response. The default is a 302 <see cref="HttpStatusCode.Redirect"/> code.</param>
         public RedirectLanguageToLocale(
-            IOptions<RouteCultureOptions> routeCultureOptions, 
+            IOptions<RouteCultureOptions> routeCultureOptions,
             int statusCode = (int)HttpStatusCode.Redirect)
         {
-            RouteCultureOptions = routeCultureOptions;
-            LanguageLocaleMap = routeCultureOptions.Value.LanguageLocaleMap;
-            StatusCode = statusCode;
+            _routeCultureOptions = routeCultureOptions;
+            _languageLocaleMap = routeCultureOptions.Value.LanguageLocaleMap;
+            _statusCode = statusCode;
         }
 
         /// <summary>
-        /// Checks that the <see cref="LanguageLocaleMap"/> contains the current request culture. If yes, redirects to a URL containing the matching locale.
+        /// Checks that the <see cref="RouteCultureOptions.LanguageLocaleMap"/> contains the current request culture. If yes, redirects to a URL containing the matching locale.
         /// </summary>
         /// <param name="context">A <see cref="Microsoft.AspNetCore.Rewrite.RewriteContext"/> context</param>
         public void ApplyRule(RewriteContext context)
         {
             var request = context.HttpContext.Request;
             var parts = request.Path.Value.Split('/');
-            var culture = parts[RouteCultureOptions.Value.CultureParameterIndex];
+            var culture = parts[_routeCultureOptions.Value.CultureParameterIndex];
 
-            if (!LanguageLocaleMap.ContainsKey(culture))
+            if (!_languageLocaleMap.ContainsKey(culture))
             {
                 context.Result = RuleResult.ContinueRules;
                 return;
             }
 
-            foreach (var map in LanguageLocaleMap)
+            foreach (var map in _languageLocaleMap)
             {
                 if (map.Key == culture)
                 {
-                    parts[RouteCultureOptions.Value.CultureParameterIndex] = map.Value;
+                    parts[_routeCultureOptions.Value.CultureParameterIndex] = map.Value;
                     break;
                 }
             }
@@ -64,7 +65,7 @@ namespace Gaois.Localizer
             string newUrl = UrlBuilder.ReplacePath(request, newPath);
 
             var response = context.HttpContext.Response;
-            response.StatusCode = StatusCode;
+            response.StatusCode = _statusCode;
             response.Headers[HeaderNames.Location] = newUrl;
             context.Result = RuleResult.EndResponse;  
         }
