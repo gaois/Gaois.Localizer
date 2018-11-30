@@ -51,7 +51,7 @@ The library provides out-of-the-box functionality that allows you to:
 - Decide if users should be redirected to a localised URL when they first request the website homepage
 - Handle scenarios where you wish to internally map a two- or three-letter ISO language code in the URL to a region or an extended language subtag
 
-Most of these features are configurable: sensible defaults are supplied, but you get to specify which types of redirects to use, how long before cookies expire, etc. The library was also designed very much with SEO in mind, and the default setup offers an optimal localisation solution when it comes to being indexed by major search engines.
+Most of these features are configurable: sensible defaults are supplied, but you get to specify which types of redirects to use, how long before cookies expire, etc. The library was also designed very much with SEO in mind, and the default setup offers an optimal localisation solution when it comes to being indexed by major search engines. The localizer middleware plays nice even when the application is run in a virtual directory.
 
 ## Install and setup
 

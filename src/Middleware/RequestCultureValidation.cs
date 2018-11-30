@@ -36,6 +36,12 @@ namespace Gaois.Localizer
         {
             var path = context.Request.Path;
             var parameters = context.Request.Path.Value.Split('/');
+
+            if (parameters is null || parameters.Length <= 1)
+            {
+                return _next(context);
+            }
+
             var culture = parameters[_routeCultureOptions.Value.CultureParameterIndex];
             var excludedRoutes = _routeCultureOptions.Value.ExcludedRoutes ?? new List<string>();
 
