@@ -377,4 +377,4 @@ Not yet, but one is coming in version 0.7.
 
 ## Credits
 
-The Gaois.Localizer library is authored by [Ronan Doherty](https://github.com/rodoch), but much credit is due to his colleagues [Michal Boleslav Měchura](https://github.com/michmech) and [Brian Ó Raghallaigh](https://github.com/oraghalb). The former's book *[An Ríomhaire Ilteangach](http://www.lexiconista.com/arit/)* is a font of quality guidance in these matters.
+The Gaois.Localizer library is authored by [Ronan Doherty](https://github.com/rodoch), but much credit is due to his colleagues [Michal Boleslav Měchura](https://github.com/michmech) and [Brian Ó Raghallaigh](https://github.com/oraghalb). The former's book *[An Ríomhaire Ilteangach](http://www.lexiconista.com/arit/)* has a wealth of quality guidance on these topics.
