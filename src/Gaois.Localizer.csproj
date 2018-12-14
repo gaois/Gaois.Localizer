@@ -4,16 +4,19 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>A toolkit for creating multilingual ASP.NET Core web applications.</Description>
     <Version>0.6.6-alpha</Version>
-    <PackageTags>localization globalization internationalization web</PackageTags>
+    <Authors>Ronan Doherty</Authors>
+    <Company>Fiontar &amp; Scoil na Gaeilge, Dublin City University</Company>
+    <Copyright>Copyright 2018</Copyright>
+    <Description>A toolkit for creating multilingual ASP.NET Core web applications.</Description>
     <RepositoryType>Git</RepositoryType>
     <RepositoryUrl>https://github.com/gaois/Gaois.Localizer/</RepositoryUrl>
+    <PackageId>Gaois.Localizer</PackageId>
+    <PackageTags>localization;globalization;internationalization;web</PackageTags>
+    <PackageIconUrl></PackageIconUrl>
     <PackageProjectUrl>https://github.com/gaois/Gaois.Localizer/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/gaois/Gaois.Localizer/blob/master/LICENSE</PackageLicenseUrl>
     <PackageReleaseNotes>Initial prerelease trial</PackageReleaseNotes>
-    <Copyright>Copyright 2018</Copyright>
-    <Authors>Ronan Doherty</Authors>
-    <Company>Fiontar agus Scoil na Gaeilge, Dublin City University</Company>
   </PropertyGroup>
 
   <ItemGroup>
