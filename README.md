@@ -27,6 +27,7 @@ The library was developed at [Fiontar & Scoil na Gaeilge](https://www.gaois.ie),
   - [Another word about SEO](#another-word-about-seo)
 - [Language tag choice](#language-tag-choice)
 - [Migrating between language tags in a URL scheme](#migrating-between-language-tags-in-a-url-scheme)
+- [Helper methods](#helper-methods)
 - [Is there a sample application?](#is-there-a-sample-application)
 - [Who is using this?](#who-is-using-this)
 - [Credits](#credits)
@@ -370,6 +371,22 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 ```
 
 Now, all requests to `www.mymultilingualapp.com/ga/about/` will be automatically redirected to `www.mymultilingualapp.com/ga-IE/about/`. The `RedirectLanguageToLocale` object implements a 302 redirect by default, but you can specify a 301 or other redirect type in an optional argument.
+
+## Helper methods
+
+Gaois.Localizer also contains extension methods that aid common localisation-related tasks.
+
+### GetAlternateDisplayUrl()
+
+This method extends a `HttpRequest` object in a manner similar to the [GetDisplayUrl()](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.extensions.urihelper.getdisplayurl?view=aspnetcore-2.2) method. However, it allows you to replace a URL path parameter (if present) by index.
+
+### GetAlternateEncodedUrl()
+
+This is equivalent to the previous method, except that it returns a fully URL-encoded string. In the context of web application localisation, this method is particularly useful when it comes to generating alternate links with alternate culture parameters:
+
+```c#
+<link rel="alternate" hreflang="@lang" href="@Context.Request.GetAlternateDisplayUrl(1, "fr-FR")">
+```
 
 ## Is there a sample application?
 

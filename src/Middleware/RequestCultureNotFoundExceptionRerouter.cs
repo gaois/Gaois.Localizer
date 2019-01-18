@@ -75,7 +75,7 @@ namespace Gaois.Localizer
                 parts[_routeCultureOptions.Value.CultureParameterIndex] = CultureInfo.CurrentCulture.Name;
 
                 string newPath = (string.IsNullOrEmpty(_responsePath)) ? string.Join("/", parts) : _responsePath;
-                string newUrl = UrlBuilder.ReplacePath(request, newPath);
+                string newUrl = UrlUtilities.ReplacePath(request, newPath);
 
                 _logger.LogRequestCultureNotFoundRedirect(newPath);
 

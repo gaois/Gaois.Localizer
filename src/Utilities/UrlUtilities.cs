@@ -5,7 +5,7 @@ namespace Gaois.Localizer
     /// <summary>
     /// Utility methods that make it easier to construct URLs
     /// </summary>
-    public static class UrlBuilder
+    public static class UrlUtilities
     {
         /// <summary>
         /// Replaces the request path and returns a new URL

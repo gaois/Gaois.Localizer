@@ -62,7 +62,7 @@ namespace Gaois.Localizer
             }
 
             string newPath = string.Join("/", parts);
-            string newUrl = UrlBuilder.ReplacePath(request, newPath);
+            string newUrl = UrlUtilities.ReplacePath(request, newPath);
 
             var response = context.HttpContext.Response;
             response.StatusCode = _statusCode;

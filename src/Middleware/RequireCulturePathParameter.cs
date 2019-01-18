@@ -57,7 +57,7 @@ namespace Gaois.Localizer
 
             string newPath = "/" + CultureInfo.CurrentCulture.Name;
             newPath += (_routeOptions.Value.AppendTrailingSlash == true) ? "/" : string.Empty;
-            string newUrl = UrlBuilder.ReplacePath(request, newPath);
+            string newUrl = UrlUtilities.ReplacePath(request, newPath);
 
             _logger.LogRequiredCultureRedirect(newPath);
 
