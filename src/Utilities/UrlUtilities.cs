@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Gaois.Localizer
 {
@@ -14,7 +15,7 @@ namespace Gaois.Localizer
         /// <param name="path">The string that will be inserted in place of the current path</param>
         public static string ReplacePath(HttpRequest request, string path)
         {
-            return request.Scheme + "://" + request.Host + request.PathBase + path + request.QueryString;
+            return UriHelper.BuildAbsolute(request.Scheme, request.Host, request.PathBase, path, request.QueryString);
         }
     }
 }
