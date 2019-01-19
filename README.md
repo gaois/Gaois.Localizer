@@ -29,7 +29,6 @@ The library was developed at [Fiontar & Scoil na Gaeilge](https://www.gaois.ie),
 - [Migrating between language tags in a URL scheme](#migrating-between-language-tags-in-a-url-scheme)
 - [Helper methods](#helper-methods)
 - [Is there a sample application?](#is-there-a-sample-application)
-- [Who is using this?](#who-is-using-this)
 - [Credits](#credits)
 
 ## What problem does it solve?
