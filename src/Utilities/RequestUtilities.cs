@@ -18,7 +18,7 @@ namespace Gaois.Localizer
         /// <param name="parameterIndex">The index of the URL parameter to be replaced</param>
         /// <param name="replacementParameter">The new replacement parameter</param>
         /// <returns>The new display URL</returns>
-        public static string GetAlternateDisplayUrl(this HttpRequest request, int parameterIndex, string replacementParameter)
+        public static string GetDisplayUrl(this HttpRequest request, int parameterIndex, string replacementParameter)
         {
             var parameters = request.Path.Value.Split('/');
 
@@ -42,7 +42,7 @@ namespace Gaois.Localizer
         /// <param name="parameterIndex">The index of the URL parameter to be replaced</param>
         /// <param name="replacementParameter">The new replacement parameter</param>
         /// <returns>The new encoded URL</returns>
-        public static string GetAlternateEncodedUrl(this HttpRequest request, int parameterIndex, string replacementParameter)
+        public static string GetEncodedUrl(this HttpRequest request, int parameterIndex, string replacementParameter)
         {
             var parameters = request.Path.Value.Split('/');
 

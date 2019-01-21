@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.6.9-alpha</Version>
+    <Version>0.6.10-alpha</Version>
     <Authors>Ronan Doherty</Authors>
     <Company>Fiontar &amp; Scoil na Gaeilge, Dublin City University</Company>
     <Copyright>Copyright 2018</Copyright>
