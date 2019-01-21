@@ -375,11 +375,11 @@ Now, all requests to `www.mymultilingualapp.com/ga/about/` will be automatically
 
 Gaois.Localizer also contains extension methods that aid common localisation-related tasks.
 
-### GetAlternateDisplayUrl()
+### GetDisplayUrl()
 
-This method extends a `HttpRequest` object in a manner similar to the [GetDisplayUrl()](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.extensions.urihelper.getdisplayurl?view=aspnetcore-2.2) method. However, it allows you to replace a URL path parameter (if present) by index.
+This method extends the [GetDisplayUrl()](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.extensions.urihelper.getdisplayurl?view=aspnetcore-2.2) method, allowing you to replace a URL path parameter (if present) by index.
 
-### GetAlternateEncodedUrl()
+### GetEncodedUrl()
 
 This is equivalent to the previous method, except that it returns a fully URL-encoded string. In the context of web application localisation, this method is particularly useful when it comes to generating alternate links with alternate culture parameters:
 
