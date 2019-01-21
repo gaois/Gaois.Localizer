@@ -271,6 +271,7 @@ __pycache__/
 # tools/
 
 ### VisualStudioCode ###
+.vscode/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
