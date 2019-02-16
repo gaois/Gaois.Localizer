@@ -384,7 +384,7 @@ This method extends the [GetDisplayUrl()](https://docs.microsoft.com/en-us/dotne
 This is equivalent to the previous method, except that it returns a fully URL-encoded string. In the context of web application localisation, this method is particularly useful when it comes to generating alternate links with alternate culture parameters:
 
 ```c#
-<link rel="alternate" hreflang="@lang" href="@Context.Request.GetAlternateDisplayUrl(1, "fr-FR")">
+<link rel="alternate" hreflang="@lang" href="@Context.Request.GetEncodedUrl(1, "fr-FR")">
 ```
 
 ## Is there a sample application?
