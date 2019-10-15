@@ -60,7 +60,7 @@ namespace Gaois.Localizer
                 options.RequestCultureProviders.Clear();
                 options.RequestCultureProviders.Add(
                     new RouteCultureProvider(
-                        options.SupportedCultures, 
+                        options.SupportedCultures,
                         options.DefaultRequestCulture,
                         settings.RouteCulture.CultureParameterIndex));
             });
