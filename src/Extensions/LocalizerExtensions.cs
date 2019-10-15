@@ -16,7 +16,8 @@ namespace Gaois.Localizer
         public static void UseLocalizer(this IApplicationBuilder builder)
         {
             var localizerOptions = builder.ApplicationServices
-                .GetService<IOptions<LocalizerOptions>>().Value;
+                .GetService<IOptions<LocalizerOptions>>()
+                .Value;
 
             if (localizerOptions.RequestCultureRerouter.RerouteRequestCultureExceptions)
             {
@@ -30,7 +31,8 @@ namespace Gaois.Localizer
             builder.UseRequestCultureValidation();
 
             var localizationOptions = builder.ApplicationServices
-                .GetService<IOptions<RequestLocalizationOptions>>().Value;
+                .GetService<IOptions<RequestLocalizationOptions>>()
+                .Value;
 
             builder.UseRequestLocalization(localizationOptions);
 

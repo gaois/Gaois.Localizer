@@ -49,40 +49,44 @@ namespace Gaois.Localizer
         /// </summary>
         public Task<ProviderCultureResult> DetermineProviderCultureResult(HttpContext context)
         {
-            var url = context.Request.Path;
+            var path = context.Request.Path.ToString();
 
             // If no culture provided in URL, infer from HTTP headers & cookies, or else fall back to default culture
-            if (url.ToString().Length <= 1)
+            if (path.Length <= 1)
             {
                 // Establish default culture, it will be updated if subsequent criteria are met
                 var locale = _defaultCulture.Name;
 
                 // If culture is present in HTTP Accept-Language header
-                var acceptLanguages = context.Request.Headers["Accept-Language"].ToString().Split(',');
+                var acceptLanguages = context.Request.Headers["Accept-Language"].ToString()
+                    .Split(',');
 
-                foreach (var supportedCulture in _supportedCultures)
+                if (acceptLanguages is string[] && acceptLanguages.Length > 0)
                 {
-                    if (acceptLanguages.Contains(supportedCulture.Name)
-                        || acceptLanguages.Contains(supportedCulture.TwoLetterISOLanguageName)
-                        || acceptLanguages.Contains(supportedCulture.ThreeLetterISOLanguageName))
+                    foreach (var supportedCulture in _supportedCultures)
                     {
-                        locale = supportedCulture.Name;
-                        break;
+                        if (acceptLanguages.Contains(supportedCulture.Name)
+                            || acceptLanguages.Contains(supportedCulture.TwoLetterISOLanguageName)
+                            || acceptLanguages.Contains(supportedCulture.ThreeLetterISOLanguageName))
+                        {
+                            locale = supportedCulture.Name;
+                            break;
+                        }
                     }
                 }
 
                 // If culture is present in request cookies
-                var cookie = context.Request.Cookies[".AspNetCore.Culture"];
+                var cookie = context.Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
 
                 if (!string.IsNullOrWhiteSpace(cookie))
                 {
-                    var cultureCookie = CookieCultureProvider.GetCultureFromCookie(cookie);
+                    var cookieValue = CookieRequestCultureProvider.ParseCookieValue(cookie);
 
                     foreach (var supportedCulture in _supportedCultures)
                     {
-                        if (cultureCookie == supportedCulture.Name
-                            || cultureCookie == supportedCulture.TwoLetterISOLanguageName
-                            || cultureCookie == supportedCulture.ThreeLetterISOLanguageName)
+                        if (cookieValue.Cultures.Contains(supportedCulture.Name)
+                            || cookieValue.Cultures.Contains(supportedCulture.TwoLetterISOLanguageName)
+                            || cookieValue.Cultures.Contains(supportedCulture.ThreeLetterISOLanguageName))
                         {
                             locale = supportedCulture.Name;
                             break;

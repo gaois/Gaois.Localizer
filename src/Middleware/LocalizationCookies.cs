@@ -68,16 +68,14 @@ namespace Gaois.Localizer
                 return _next(context);
 
             var locale = CultureInfo.CurrentCulture.Name;
-            var cookie = CookieRequestCultureProvider.DefaultCookieName;
+            var cookie = context.Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+            var cookieValue = CookieRequestCultureProvider.ParseCookieValue(cookie);
 
-            if (!string.IsNullOrWhiteSpace(cookie))
-                if (locale == CookieCultureProvider.GetCultureFromCookie(cookie))
-                    return _next(context);
-
-            var response = context.Response;
+            if (!string.IsNullOrWhiteSpace(cookie) && cookieValue.Cultures.Contains(locale))
+                return _next(context);
             
-            response.Cookies.Append(
-                cookie,
+            context.Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture: locale, uiCulture: locale)),
                 new CookieOptions { Expires = _cookieExpires, IsEssential = _cookieIsEssential }
             );

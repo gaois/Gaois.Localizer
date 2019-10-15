@@ -52,7 +52,10 @@ namespace Gaois.Localizer
                 return _next(context);
 
             var newPath = $"/{CultureInfo.CurrentCulture.Name}";
-            newPath += (_routeOptions.Value.AppendTrailingSlash) ? "/" : string.Empty;
+
+            if (_routeOptions.Value.AppendTrailingSlash)
+                newPath += "/";
+
             var newUrl = UrlUtilities.ReplacePath(request, newPath);
 
             _logger.LogRequiredCultureRedirect(newPath);
