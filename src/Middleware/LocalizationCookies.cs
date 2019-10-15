@@ -55,8 +55,8 @@ namespace Gaois.Localizer
         /// Appends a culture cookie to the HTTP response, when appropriate, to store the client's culture preference
         /// </summary>
         /// <remarks>
-        /// If the current request does not already contain a culture cookie, a new one will be appended to the response. 
-        /// If the request contains a culture cookie but it is different from the current culture, a new cookie will be appended.
+        /// <para>If the current request does not already contain a culture cookie, a new one will be appended to the response.</para>
+        /// <para>If the request contains a culture cookie but it is different from the current culture, a new cookie will be appended.</para>
         /// </remarks>
         public Task Invoke(HttpContext context)
         {
@@ -65,28 +65,21 @@ namespace Gaois.Localizer
             var excludedRoutes = _routeCultureOptions.Value.ExcludedRoutes ?? new List<string>();
 
             if (ExcludedRouteProvider.IsExcludedRoute(excludedRoutes, path))
-            {
                 return _next(context);
-            }
 
-            string locale = CultureInfo.CurrentCulture.Name;
-            string cookie = CookieRequestCultureProvider.DefaultCookieName;
+            var locale = CultureInfo.CurrentCulture.Name;
+            var cookie = CookieRequestCultureProvider.DefaultCookieName;
 
-            if (!string.IsNullOrEmpty(cookie))
-            {
-                string cookieCulture = CookieCultureProvider.GetCultureFromCookie(cookie);
-
-                if (cookieCulture == locale)
-                {
+            if (!string.IsNullOrWhiteSpace(cookie))
+                if (locale == CookieCultureProvider.GetCultureFromCookie(cookie))
                     return _next(context);
-                }
-            }
 
             var response = context.Response;
             
             response.Cookies.Append(
-                cookie, CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture: locale, uiCulture: locale)),
-                    new CookieOptions { Expires = _cookieExpires, IsEssential = _cookieIsEssential }
+                cookie,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture: locale, uiCulture: locale)),
+                new CookieOptions { Expires = _cookieExpires, IsEssential = _cookieIsEssential }
             );
             
             _logger.LogLocalizationCookieAppended(request.Path);

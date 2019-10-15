@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Options;
 
 namespace Gaois.Localizer
 {
@@ -11,9 +10,7 @@ namespace Gaois.Localizer
         /// <summary>
         /// Adds middleware to validate that the culture provided in the HTTP request is a supported culture
         /// </summary>
-        public static IApplicationBuilder UseRequestCultureValidation(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<RequestCultureValidation>();
-        }
+        public static IApplicationBuilder UseRequestCultureValidation(this IApplicationBuilder builder) => 
+            builder.UseMiddleware<RequestCultureValidation>();
     }
 }

@@ -1,7 +1,5 @@
 using System;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -22,19 +20,22 @@ namespace Gaois.Localizer
             this IServiceCollection services, 
             Action<LocalizerOptions> configureSettings = null)
         {
-            if (configureSettings == null)
-            {
+            if (configureSettings is null)
                 return services;
-            }
 
-            services.Configure<LocalizerOptions>(configureSettings);
+            services.Configure(configureSettings);
 
             var provider = services.BuildServiceProvider();
             var settings = provider.GetService<IOptions<LocalizerOptions>>().Value;
 
-            if (settings.SupportedCultures == null) throw new ArgumentNullException(nameof(settings.SupportedCultures));
-            if (settings.SupportedUICultures == null) throw new ArgumentNullException(nameof(settings.SupportedUICultures));
-            if (settings.DefaultRequestCulture == null) throw new ArgumentNullException(nameof(settings.DefaultRequestCulture));
+            if (settings.SupportedCultures is null) 
+                throw new ArgumentNullException(nameof(settings.SupportedCultures));
+
+            if (settings.SupportedUICultures is null)
+                throw new ArgumentNullException(nameof(settings.SupportedUICultures));
+
+            if (settings.DefaultRequestCulture is null)
+                throw new ArgumentNullException(nameof(settings.DefaultRequestCulture));
 
             services.Configure<LocalizerOptions>(options => 
             {
@@ -57,8 +58,11 @@ namespace Gaois.Localizer
                 options.SupportedCultures = settings.SupportedCultures;
                 options.SupportedUICultures = settings.SupportedUICultures;
                 options.RequestCultureProviders.Clear();
-                options.RequestCultureProviders.Add(new RouteCultureProvider(options.SupportedCultures, 
-                    options.DefaultRequestCulture, settings.RouteCulture.CultureParameterIndex));
+                options.RequestCultureProviders.Add(
+                    new RouteCultureProvider(
+                        options.SupportedCultures, 
+                        options.DefaultRequestCulture,
+                        settings.RouteCulture.CultureParameterIndex));
             });
 
             services.Configure<RequestCultureRerouterOptions>(options => 

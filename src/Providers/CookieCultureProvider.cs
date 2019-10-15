@@ -13,7 +13,7 @@ namespace Gaois.Localizer
         /// </param>
         public static string GetCultureFromCookie(string cookie)
         {
-            string[] parts = cookie.Split('|');
+            var parts = cookie.Split('|');
             return parts[0].Replace("c=", string.Empty);
         }
 
@@ -25,7 +25,7 @@ namespace Gaois.Localizer
         /// </param>
         public static string GetUICultureFromCookie(string cookie)
         {
-            string[] parts = cookie.Split('|');
+            var parts = cookie.Split('|');
             return parts[1].Replace("uic=", string.Empty);
         }
     }

@@ -14,9 +14,7 @@ namespace Gaois.Localizer
         /// <remarks>
         /// Use with RequestCultureValidation to test for unsupported cultures in the request and handle the exception. Must be placed before UseRequestCultureValidation() in the request execution pipeline.
         /// </remarks>
-        public static IApplicationBuilder UseRequestCultureExceptionHandler(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<RequestCultureExceptionHandler>();
-        }
+        public static IApplicationBuilder UseRequestCultureExceptionHandler(this IApplicationBuilder builder) =>
+            builder.UseMiddleware<RequestCultureExceptionHandler>();
     }
 }

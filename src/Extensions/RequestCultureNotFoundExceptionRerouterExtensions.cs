@@ -1,4 +1,3 @@
-using System.Net;
 using Microsoft.AspNetCore.Builder;
 
 namespace Gaois.Localizer
@@ -14,10 +13,8 @@ namespace Gaois.Localizer
         /// <remarks>
         /// Use with <see cref="RequestCultureValidation"/> to test for unsupported cultures in the request and handle the exception. Must be placed before UseRequestCultureValidation() in the request execution pipeline.
         /// </remarks>
-        public static IApplicationBuilder UseRequestCultureExceptionRerouter(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<RequestCultureExceptionRerouter>();
-        }
+        public static IApplicationBuilder UseRequestCultureExceptionRerouter(this IApplicationBuilder builder) =>
+            builder.UseMiddleware<RequestCultureExceptionRerouter>();
 
         /// <summary>
         /// Adds middleware that will redirect the user to a page in the default culture whenever a <see cref="System.Globalization.CultureNotFoundException"/> is thrown
@@ -28,10 +25,8 @@ namespace Gaois.Localizer
         /// <param name="builder">The <see cref="IApplicationBuilder"/></param>
         /// <param name="options">The <see cref="RequestCultureRerouterOptions"/> to configure the middleware with</param>
         public static IApplicationBuilder UseRequestCultureExceptionRerouter(
-            this IApplicationBuilder builder, 
-            RequestCultureRerouterOptions options)
-        {
-            return builder.UseMiddleware<RequestCultureExceptionRerouter>(options);
-        }
+            this IApplicationBuilder builder,
+            RequestCultureRerouterOptions options) =>
+            builder.UseMiddleware<RequestCultureExceptionRerouter>(options);
     }
 }

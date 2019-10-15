@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ using Microsoft.Net.Http.Headers;
 namespace Gaois.Localizer
 {
     /// <summary>
-    /// Causes the request to be redirected to a page in the default culture when a <see cref="System.Globalization.CultureNotFoundException"/> is thrown in the request execution pipeline
+    /// Causes the request to be redirected to a page in the default culture when a <see cref="CultureNotFoundException"/> is thrown in the request execution pipeline
     /// </summary>
     public class RequestCultureExceptionRerouter
     {
@@ -21,7 +20,7 @@ namespace Gaois.Localizer
         private readonly string _responsePath;
 
         /// <summary>
-        /// Causes the request to be redirected to a page in the default culture when a <see cref="System.Globalization.CultureNotFoundException"/> is thrown in the request execution pipeline
+        /// Causes the request to be redirected to a page in the default culture when a <see cref="CultureNotFoundException"/> is thrown in the request execution pipeline
         /// </summary>
         public RequestCultureExceptionRerouter(
             RequestDelegate next,
@@ -35,7 +34,7 @@ namespace Gaois.Localizer
         }
 
         /// <summary>
-        /// Causes the request to be redirected to a page in the default culture when a <see cref="System.Globalization.CultureNotFoundException"/> is thrown in the request execution pipeline
+        /// Causes the request to be redirected to a page in the default culture when a <see cref="CultureNotFoundException"/> is thrown in the request execution pipeline
         /// </summary>
         /// <param name="next">A task that represents the completion of request processing</param>
         /// <param name="routeCultureOptions">The <see cref="RouteCultureOptions"/> to configure the rerouter with</param>
@@ -55,7 +54,7 @@ namespace Gaois.Localizer
         }
 
         /// <summary>
-        /// Async method that listens for events in the request execution pipeline. Will catch <see cref="System.Globalization.CultureNotFoundException"/> and return instructions to redirect the request in the response.
+        /// Async method that listens for events in the request execution pipeline. Will catch <see cref="CultureNotFoundException"/> and return instructions to redirect the request in the response.
         /// </summary>
         public async Task Invoke(HttpContext context)
         {
@@ -66,16 +65,17 @@ namespace Gaois.Localizer
             catch (CultureNotFoundException)
             {
                 if (context.Response.HasStarted)
-                {
                     throw;
-                }
 
                 var request = context.Request;
                 var parts = request.Path.Value.Split('/');
+
                 parts[_routeCultureOptions.Value.CultureParameterIndex] = CultureInfo.CurrentCulture.Name;
 
-                string newPath = (string.IsNullOrEmpty(_responsePath)) ? string.Join("/", parts) : _responsePath;
-                string newUrl = UrlUtilities.ReplacePath(request, newPath);
+                var newPath = (string.IsNullOrWhiteSpace(_responsePath))
+                    ? string.Join("/", parts)
+                    : _responsePath;
+                var newUrl = UrlUtilities.ReplacePath(request, newPath);
 
                 _logger.LogRequestCultureNotFoundRedirect(newPath);
 

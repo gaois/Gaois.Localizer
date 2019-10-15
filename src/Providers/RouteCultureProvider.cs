@@ -27,7 +27,7 @@ namespace Gaois.Localizer
         /// Determines the request's culture information
         /// </summary>
         /// <param name="supportedCultures">The cultures supported by the application</param>
-        /// <param name="requestCulture">The default culture to use for requests when a supported culture could not be determined by one of the configured <see cref="Microsoft.AspNetCore.Localization.IRequestCultureProvider"/>s. Defaults to <see cref="System.Globalization.CultureInfo.CurrentCulture"/> and <see cref="System.Globalization.CultureInfo.CurrentUICulture"/>.</param>
+        /// <param name="requestCulture">The default culture to use for requests when a supported culture could not be determined by one of the configured <see cref="IRequestCultureProvider"/>s. Defaults to <see cref="CultureInfo.CurrentCulture"/> and <see cref="CultureInfo.CurrentUICulture"/>.</param>
         /// <param name="cultureParameterIndex">Index of the request path parameter that represents the desired culture. The default value is 1.</param>
         /// <remarks>
         /// The culture is determined with reference to the following criteria, in order: (1) the culture parameter in URL, (2) the culture request cookie, (3) the HTTP Accept-Language header.
@@ -49,13 +49,13 @@ namespace Gaois.Localizer
         /// </summary>
         public Task<ProviderCultureResult> DetermineProviderCultureResult(HttpContext context)
         {
-            PathString url = context.Request.Path;
+            var url = context.Request.Path;
 
             // If no culture provided in URL, infer from HTTP headers & cookies, or else fall back to default culture
             if (url.ToString().Length <= 1)
             {
                 // Establish default culture, it will be updated if subsequent criteria are met
-                string locale = _defaultCulture.Name;
+                var locale = _defaultCulture.Name;
 
                 // If culture is present in HTTP Accept-Language header
                 var acceptLanguages = context.Request.Headers["Accept-Language"].ToString().Split(',');
@@ -72,11 +72,11 @@ namespace Gaois.Localizer
                 }
 
                 // If culture is present in request cookies
-                string cookie = context.Request.Cookies[".AspNetCore.Culture"];
+                var cookie = context.Request.Cookies[".AspNetCore.Culture"];
 
-                if (!string.IsNullOrEmpty(cookie))
+                if (!string.IsNullOrWhiteSpace(cookie))
                 {
-                    string cultureCookie = CookieCultureProvider.GetCultureFromCookie(cookie);
+                    var cultureCookie = CookieCultureProvider.GetCultureFromCookie(cookie);
 
                     foreach (var supportedCulture in _supportedCultures)
                     {
@@ -90,7 +90,7 @@ namespace Gaois.Localizer
                     }
                 }
 
-                return Task.FromResult<ProviderCultureResult>(new ProviderCultureResult(locale, locale));
+                return Task.FromResult(new ProviderCultureResult(locale, locale));
             }
 
             var parameters = context.Request.Path.Value.Split('/');
@@ -98,12 +98,10 @@ namespace Gaois.Localizer
 
             // If culture is not formatted correctly, return default culture
             if (!Regex.IsMatch(culture, @"^[a-z]{2}(-[A-Z]{2})*$"))
-            {
-                return Task.FromResult<ProviderCultureResult>(new ProviderCultureResult(_defaultCulture.Name, _defaultUICulture.Name));
-            }
+                return Task.FromResult(new ProviderCultureResult(_defaultCulture.Name, _defaultUICulture.Name));
 
             // Otherwise, return Culture and UICulture from route culture parameter
-            return Task.FromResult<ProviderCultureResult>(new ProviderCultureResult(culture, culture));
+            return Task.FromResult(new ProviderCultureResult(culture, culture));
         }
     }
 }

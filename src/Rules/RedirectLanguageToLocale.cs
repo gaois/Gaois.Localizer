@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Options;
@@ -21,7 +18,6 @@ namespace Gaois.Localizer
         private readonly IDictionary<string, string> _languageLocaleMap;
         private readonly int _statusCode;
 
-
         /// <summary>
         /// Redirects a request containing a two- or three-letter ISO language code to a URL containing another supported culture
         /// </summary>
@@ -39,7 +35,7 @@ namespace Gaois.Localizer
         /// <summary>
         /// Checks that the <see cref="RouteCultureOptions.LanguageLocaleMap"/> contains the current request culture. If yes, redirects to a URL containing the matching locale.
         /// </summary>
-        /// <param name="context">A <see cref="Microsoft.AspNetCore.Rewrite.RewriteContext"/> context</param>
+        /// <param name="context">A <see cref="RewriteContext"/> context</param>
         public void ApplyRule(RewriteContext context)
         {
             var request = context.HttpContext.Request;
@@ -61,8 +57,8 @@ namespace Gaois.Localizer
                 }
             }
 
-            string newPath = string.Join("/", parts);
-            string newUrl = UrlUtilities.ReplacePath(request, newPath);
+            var newPath = string.Join("/", parts);
+            var newUrl = UrlUtilities.ReplacePath(request, newPath);
 
             var response = context.HttpContext.Response;
             response.StatusCode = _statusCode;

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 
@@ -18,22 +16,16 @@ namespace Gaois.Localizer
         /// <param name="path">The request path</param>
         public static bool IsExcludedRoute(IList<string> excludedRoutes, PathString path)
         {
-            var routes = excludedRoutes as List<string>;
-
-            if (routes is null || routes.Count <= 0)
-            {
+            if (!(excludedRoutes is List<string> routes) || routes.Count <= 0)
                 return false;
-            }
 
-            foreach (string route in routes)
+            foreach (var route in routes)
             {
                 var regex = new Regex(route, RegexOptions.Compiled);
                 var match = regex.Match(path);
 
                 if (match.Success)
-                {
                     return true;
-                }
             }
 
             return false;

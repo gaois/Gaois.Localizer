@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
@@ -50,14 +48,12 @@ namespace Gaois.Localizer
             var parameters = request.Path.Value.Split('/');
             var culture = parameters[_routeCultureOptions.Value.CultureParameterIndex];
 
-            if (!string.IsNullOrEmpty(culture))
-            {
+            if (!string.IsNullOrWhiteSpace(culture))
                 return _next(context);
-            }
 
-            string newPath = "/" + CultureInfo.CurrentCulture.Name;
-            newPath += (_routeOptions.Value.AppendTrailingSlash == true) ? "/" : string.Empty;
-            string newUrl = UrlUtilities.ReplacePath(request, newPath);
+            var newPath = $"/{CultureInfo.CurrentCulture.Name}";
+            newPath += (_routeOptions.Value.AppendTrailingSlash) ? "/" : string.Empty;
+            var newUrl = UrlUtilities.ReplacePath(request, newPath);
 
             _logger.LogRequiredCultureRedirect(newPath);
 

@@ -11,10 +11,8 @@ namespace Gaois.Localizer
         /// Adds middleware to store the current request culture in a user cookie
         /// </summary>
         /// <param name="builder">The <see cref="IApplicationBuilder"/></param>
-        public static IApplicationBuilder UseLocalizationCookies(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<LocalizationCookies>();
-        }
+        public static IApplicationBuilder UseLocalizationCookies(this IApplicationBuilder builder) =>
+            builder.UseMiddleware<LocalizationCookies>();
 
         /// <summary>
         /// Adds middleware to store the current request culture in a user cookie
@@ -23,9 +21,7 @@ namespace Gaois.Localizer
         /// <param name="options">The <see cref="LocalizationCookiesOptions"/> to configure the middleware with</param>
         public static IApplicationBuilder UseLocalizationCookies(
             this IApplicationBuilder builder, 
-            LocalizationCookiesOptions options)
-        {
-            return builder.UseMiddleware<LocalizationCookies>(options);
-        }
+            LocalizationCookiesOptions options) => 
+            builder.UseMiddleware<LocalizationCookies>(options);
     }
 }

@@ -30,7 +30,7 @@ namespace Gaois.Localizer
         }
 
         /// <summary>
-        /// Tests the request culture against supported application cultures and non-culture values. Throws a <see cref="System.Globalization.CultureNotFoundException"/> if request culture is not supported.
+        /// Tests the request culture against supported application cultures and non-culture values. Throws a <see cref="CultureNotFoundException"/> if request culture is not supported.
         /// </summary>
         public Task Invoke(HttpContext context)
         {
@@ -38,9 +38,7 @@ namespace Gaois.Localizer
             var parameters = context.Request.Path.Value.Split('/');
 
             if (parameters is null || parameters.Length <= 1)
-            {
                 return _next(context);
-            }
 
             var culture = parameters[_routeCultureOptions.Value.CultureParameterIndex];
             var excludedRoutes = _routeCultureOptions.Value.ExcludedRoutes ?? new List<string>();
@@ -65,10 +63,8 @@ namespace Gaois.Localizer
         /// <param name="requestCulture">The culture provided in the request</param>
         public bool IsSupportedCulture(string requestCulture)
         {
-            if (string.IsNullOrEmpty(requestCulture))
-            {
+            if (string.IsNullOrWhiteSpace(requestCulture))
                 return true;
-            }
             
             var culture = new CultureSupportValidation(_localizationOptions);
             return culture.IsSupportedCulture(requestCulture);

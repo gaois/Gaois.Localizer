@@ -23,9 +23,7 @@ namespace Gaois.Localizer
             var parameters = request.Path.Value.Split('/');
 
             if (parameters is null || parameters.Length <= 1)
-            {
                 return request.GetDisplayUrl();
-            }
 
             parameters[parameterIndex] = replacementParameter;
 
@@ -47,9 +45,7 @@ namespace Gaois.Localizer
             var parameters = request.Path.Value.Split('/');
 
             if (parameters is null || parameters.Length <= 1)
-            {
                 return request.GetDisplayUrl();
-            }
 
             parameters[parameterIndex] = replacementParameter;
             var newPath = string.Join("/", parameters);

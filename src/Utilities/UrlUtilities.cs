@@ -13,9 +13,7 @@ namespace Gaois.Localizer
         /// </summary>
         /// <param name="request">The HTTP request</param>
         /// <param name="path">The string that will be inserted in place of the current path</param>
-        public static string ReplacePath(HttpRequest request, string path)
-        {
-            return UriHelper.BuildAbsolute(request.Scheme, request.Host, request.PathBase, path, request.QueryString);
-        }
+        public static string ReplacePath(HttpRequest request, string path) =>
+            UriHelper.BuildAbsolute(request.Scheme, request.Host, request.PathBase, path, request.QueryString);
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -19,7 +18,7 @@ namespace Gaois.Localizer
             var localizerOptions = builder.ApplicationServices
                 .GetService<IOptions<LocalizerOptions>>().Value;
 
-            if (localizerOptions.RequestCultureRerouter.RerouteRequestCultureExceptions == true)
+            if (localizerOptions.RequestCultureRerouter.RerouteRequestCultureExceptions)
             {
                 builder.UseRequestCultureExceptionRerouter(localizerOptions.RequestCultureRerouter);
             }
@@ -35,15 +34,11 @@ namespace Gaois.Localizer
 
             builder.UseRequestLocalization(localizationOptions);
 
-            if (localizerOptions.LocalizationCookies.UseLocalizationCookies == true)
-            {
+            if (localizerOptions.LocalizationCookies.UseLocalizationCookies)
                 builder.UseLocalizationCookies(localizerOptions.LocalizationCookies);
-            }
 
-            if (localizerOptions.RequireCulturePathParameter.RequireCulturePathParameter == true)
-            {
+            if (localizerOptions.RequireCulturePathParameter.RequireCulturePathParameter)
                 builder.UseRequireCulturePathParameter();
-            }
         }
     }
 }

@@ -42,9 +42,7 @@ namespace Gaois.Localizer
         public string InferLocaleFromLanguage(string code)
         {
             if (LanguageLocaleMap.ContainsKey(code))
-            {
                 return LanguageLocaleMap[code];
-            }
 
             return code;
         }
